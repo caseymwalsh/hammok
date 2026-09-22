@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Morgan Hill State Forest — September 26-27, 2026</title>
+<style>
+  :root {
+    --bg: #faf8f4;
+    --surface: #ffffff;
+    --border: #e3ddd0;
+    --text: #2b2620;
+    --text-muted: #746b5c;
+    --accent: #5f7a52;
+    --accent-soft: #eef2e9;
+    --warn: #a05a2c;
+    --warn-soft: #fbf0e6;
+    --bad: #b3452f;
+    --bad-soft: #fbe9e4;
+    --good: #3f7d4f;
+    --good-soft: #eaf5ec;
+    --exclude-bg: #f5efe6;
+    --exclude-border: #d8ccb4;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1c1a17;
+      --surface: #26231e;
+      --border: #3a352c;
+      --text: #ece7dc;
+      --text-muted: #a89e8c;
+      --accent: #8fae7c;
+      --accent-soft: #2c3527;
+      --warn: #d99a63;
+      --warn-soft: #3a2c1f;
+      --bad: #e08469;
+      --bad-soft: #3a241f;
+      --good: #7fc191;
+      --good-soft: #223528;
+      --exclude-bg: #2a2620;
+      --exclude-border: #453e30;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #1c1a17;
+    --surface: #26231e;
+    --border: #3a352c;
+    --text: #ece7dc;
+    --text-muted: #a89e8c;
+    --accent: #8fae7c;
+    --accent-soft: #2c3527;
+    --warn: #d99a63;
+    --warn-soft: #3a2c1f;
+    --bad: #e08469;
+    --bad-soft: #3a241f;
+    --good: #7fc191;
+    --good-soft: #223528;
+    --exclude-bg: #2a2620;
+    --exclude-border: #453e30;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    margin: 0 0 1.25rem;
+  }
+
+  .breadcrumb a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover { text-decoration: underline; }
+
+  header {
+    margin-bottom: 1.25rem;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin: 0 0 0.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .dashboard {
+    margin: 1.5rem 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    margin: 0 0 0.35rem;
+  }
+
+  .stat-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+
+  .stat-value .of {
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .stat-track {
+    height: 7px;
+    background: var(--accent-soft);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .stat-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.2s ease, background-color 0.2s ease;
+  }
+
+  .stat-fill.over { background: var(--bad); }
+
+  .stat-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0.35rem 0 0;
+  }
+
+  .stat-note.over { color: var(--bad); font-weight: 600; }
+
+  h2 {
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+    margin: 2.5rem 0 1rem;
+  }
+
+  h2:first-of-type { margin-top: 0; }
+
+  .table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    min-width: 520px;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 0.65rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  thead th {
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: var(--accent-soft);
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  td.item { font-weight: 500; }
+  td.num { white-space: nowrap; }
+
+  td.item .container-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--accent-soft);
+    border-radius: 5px;
+    padding: 0.05rem 0.4rem;
+    margin-left: 0.4rem;
+  }
+
+  th.chk-col, td.chk-col {
+    width: 2.2rem;
+    text-align: center;
+    padding-left: 0.6rem;
+    padding-right: 0.4rem;
+  }
+
+  td.chk-col input[type="checkbox"] {
+    width: 1.05rem;
+    height: 1.05rem;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  tr.packed td.item {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--border);
+  }
+
+  .est {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--warn);
+    background: var(--warn-soft);
+    border-radius: 5px;
+    padding: 0.05rem 0.4rem;
+    margin-left: 0.35rem;
+    vertical-align: middle;
+  }
+
+  .footnote {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0.6rem 0.2rem 0;
+  }
+
+  .totals-table td.diff-good {
+    color: var(--good);
+    font-weight: 600;
+  }
+
+  .totals-table td.diff-good .tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--good-soft);
+    color: var(--good);
+    border-radius: 5px;
+    padding: 0.1rem 0.45rem;
+    margin-left: 0.4rem;
+  }
+
+  .exclusions {
+    background: var(--exclude-bg);
+    border: 1px solid var(--exclude-border);
+    border-radius: 10px;
+    padding: 0.25rem 1.25rem;
+  }
+
+  .exclusions table { min-width: 0; }
+  .exclusions thead th { background: transparent; }
+  .exclusions td, .exclusions th { border-bottom: 1px solid var(--exclude-border); }
+  .exclusions tbody tr:last-child td { border-bottom: none; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 620px) {
+    .dashboard { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 1.35rem; }
+    .wrap { padding: 1.75rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="breadcrumb"><a href="index.html">Trips</a> &middot; <a href="inventory.html">Gear Inventory</a></p>
+
+  <header>
+    <h1>🏕️ Morgan Hill State Forest — September 26&ndash;27, 2026</h1>
+    <p class="subtitle">1200&ndash;1200 &middot; Sept 26: 64°F/48°F, 10% chance rain &middot; Sept 27: 62°F/49°F, 10% chance rain</p>
+  </header>
+
+  <div class="dashboard">
+    <div class="stat-card">
+      <p class="stat-label">Items packed</p>
+      <p class="stat-value"><span id="items-count">0</span> <span class="of">/ <span id="items-total">0</span></span></p>
+      <div class="stat-track"><div class="stat-fill" id="items-fill"></div></div>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Weight packed</p>
+      <p class="stat-value"><span id="weight-count">0.0</span> <span class="of">/ 35 lb</span></p>
+      <div class="stat-track"><div class="stat-fill" id="weight-fill"></div></div>
+      <p class="stat-note" id="weight-note"></p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Volume packed</p>
+      <p class="stat-value"><span id="volume-count">0.0</span> <span class="of">/ 32 L</span></p>
+      <div class="stat-track"><div class="stat-fill" id="volume-fill"></div></div>
+      <p class="stat-note" id="volume-note"></p>
+    </div>
+  </div>
+
+  <h2>Hammock System</h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Packed Volume</th></tr>
+      </thead>
+      <tbody>
+        <tr data-id="eno-doublenest"><td class="chk-col"><input type="checkbox" data-item="eno-doublenest" data-weight="538" data-vol="1.9"></td><td class="item">ENO DoubleNest hammock</td><td class="num">538 g (19 oz)</td><td class="num">1.9 L</td></tr>
+        <tr data-id="kootek-body"><td class="chk-col"><input type="checkbox" data-item="kootek-body" data-weight="600" data-vol="1.8"></td><td class="item">Kootek 210T hammock (body only, no straps/bag)</td><td class="num">~600 g (21 oz)<span class="est">est.</span></td><td class="num">~1.8 L<span class="est">est.</span></td></tr>
+        <tr data-id="wise-owl-underquilt"><td class="chk-col"><input type="checkbox" data-item="wise-owl-underquilt" data-weight="520" data-vol="8"></td><td class="item">Wise Owl underquilt</td><td class="num">~520 g (18.3 oz)<span class="est">est.</span></td><td class="num">~8 L<span class="est">est.</span></td></tr>
+        <tr data-id="wise-owl-rainfly"><td class="chk-col"><input type="checkbox" data-item="wise-owl-rainfly" data-weight="740" data-vol="2.9"></td><td class="item">Wise Owl rain fly (Wisefly tarp)</td><td class="num">740 g (26 oz)</td><td class="num">2.9 L</td></tr>
+        <tr data-id="wise-owl-bugnet"><td class="chk-col"><input type="checkbox" data-item="wise-owl-bugnet" data-weight="450" data-vol="5.9"></td><td class="item">Wise Owl bug net</td><td class="num">450 g (16 oz)</td><td class="num">5.9 L</td></tr>
+        <tr data-id="webbing-straps"><td class="chk-col"><input type="checkbox" data-item="webbing-straps" data-weight="250" data-vol="0.4"></td><td class="item">Webbing straps</td><td class="num">~250 g<span class="est">est.</span></td><td class="num">~0.3–0.5 L</td></tr>
+        <tr data-id="tent-stakes-4"><td class="chk-col"><input type="checkbox" data-item="tent-stakes-4" data-weight="52" data-vol="0.1"></td><td class="item">Wise Owl tent stakes (4, aluminum)</td><td class="num">52 g (1.8 oz)</td><td class="num">~0.1 L</td></tr>
+        <tr data-id="paracord-100ft"><td class="chk-col"><input type="checkbox" data-item="paracord-100ft" data-weight="300" data-vol="0.45"></td><td class="item">~100 ft of 550 paracord</td><td class="num">~300 g (0.66 lb)</td><td class="num">~0.4–0.5 L</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="footnote">*Wise Owl underquilt: a customer review reported actual delivered weight ran closer to double the listed spec — treat 520 g as optimistic.</p>
+
+  <h2>Pack &amp; Camp Items</h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th></tr>
+      </thead>
+      <tbody>
+        <tr data-id="ems-creek-freak"><td class="chk-col"><input type="checkbox" data-item="ems-creek-freak" data-weight="1000" data-vol="0" data-container="true"></td><td class="item">EMS Creek Freak 32L backpack<span class="container-tag">container</span></td><td class="num">~1,000 g (2.2 lb)<span class="est">est.</span></td><td class="num">32 L</td></tr>
+        <tr data-id="bd-cosmo-350"><td class="chk-col"><input type="checkbox" data-item="bd-cosmo-350" data-weight="79" data-vol="0.1"></td><td class="item">Black Diamond Cosmo 350 headlamp</td><td class="num">79 g (2.8 oz)</td><td class="num">~0.1 L</td></tr>
+        <tr data-id="s2s-bowl"><td class="chk-col"><input type="checkbox" data-item="s2s-bowl" data-weight="62" data-vol="0.36"></td><td class="item">Sea to Summit Frontier bowl (medium)</td><td class="num">62 g (2.2 oz)</td><td class="num">0.68 L cap.</td></tr>
+        <tr data-id="nalgene-32oz"><td class="chk-col"><input type="checkbox" data-item="nalgene-32oz" data-weight="177" data-vol="0.95"></td><td class="item">Nalgene 32 oz wide-mouth bottle</td><td class="num">177 g (6.25 oz)</td><td class="num">0.95 L cap.</td></tr>
+        <tr data-id="cub-pillow"><td class="chk-col"><input type="checkbox" data-item="cub-pillow" data-weight="85" data-vol="0.4"></td><td class="item">Arrowhead Equipment Cub Pillow</td><td class="num">~85 g (3 oz)</td><td class="num">~0.3–0.5 L<span class="est">est.</span></td></tr>
+        <tr data-id="s2s-spork"><td class="chk-col"><input type="checkbox" data-item="s2s-spork" data-weight="11" data-vol="0.08"></td><td class="item">Sea to Summit Frontier long spork</td><td class="num">11 g (0.4 oz)</td><td class="num">~0.08 L</td></tr>
+        <tr data-id="uberleben-hexa"><td class="chk-col"><input type="checkbox" data-item="uberleben-hexa" data-weight="119" data-vol="0.02"></td><td class="item">Überleben Hexa ferro rod, 1/2"</td><td class="num">119 g (4.2 oz)</td><td class="num">~0.02 L</td></tr>
+        <tr data-id="wise-owl-stuffsack"><td class="chk-col"><input type="checkbox" data-item="wise-owl-stuffsack" data-weight="85" data-vol="0.1"></td><td class="item">Wise Owl 10L stuff sack</td><td class="num">~85 g (3 oz)<span class="est">est.</span></td><td class="num">10 L cap.</td></tr>
+        <tr data-id="sunwill-mug"><td class="chk-col"><input type="checkbox" data-item="sunwill-mug" data-weight="380" data-vol="0.55"></td><td class="item">Sunwill travel mug (assumed 20 oz)</td><td class="num">~380 g (13.4 oz)<span class="est">est.</span></td><td class="num">0.59 L cap.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="footnote">The backpack itself is tracked as a container: its weight counts toward the total, but its 32 L capacity is the target the rest of your gear packs into — not more volume to add.</p>
+
+  <h2>Fire, First Aid &amp; Extras</h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th></tr>
+      </thead>
+      <tbody>
+        <tr data-id="bic-lighter"><td class="chk-col"><input type="checkbox" data-item="bic-lighter" data-weight="20" data-vol="0.03"></td><td class="item">Purple BIC lighter</td><td class="num">~20 g (0.7 oz)</td><td class="num">~0.03 L</td></tr>
+        <tr data-id="pocket-bellows"><td class="chk-col"><input type="checkbox" data-item="pocket-bellows" data-weight="50" data-vol="0.05"></td><td class="item">Telescopic pocket bellows</td><td class="num">~50 g (1.8 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td></tr>
+        <tr data-id="vaseline-cotton"><td class="chk-col"><input type="checkbox" data-item="vaseline-cotton" data-weight="32" data-vol="0.04"></td><td class="item">Pill bottle, Vaseline-soaked cotton balls</td><td class="num">~30–35 g (1.1–1.2 oz)<span class="est">est.</span></td><td class="num">~0.04 L</td></tr>
+        <tr data-id="morakniv-companion"><td class="chk-col"><input type="checkbox" data-item="morakniv-companion" data-weight="160" data-vol="0.13"></td><td class="item">Morakniv Companion, stainless, w/ sheath</td><td class="num">~160 g (5.6 oz)<span class="est">est.</span></td><td class="num">~0.13 L<span class="est">est.</span></td></tr>
+        <tr data-id="whistle"><td class="chk-col"><input type="checkbox" data-item="whistle" data-weight="10" data-vol="0.01"></td><td class="item">Whistle</td><td class="num">~10 g (0.35 oz)<span class="est">est.</span></td><td class="num">negligible</td></tr>
+        <tr data-id="hand-warmers"><td class="chk-col"><input type="checkbox" data-item="hand-warmers" data-weight="110" data-vol="0.1"></td><td class="item">Hand warmers, 2 bags (2-pack each)</td><td class="num">~110 g (3.9 oz)<span class="est">est.</span></td><td class="num">~0.1 L<span class="est">est.</span></td></tr>
+        <tr data-id="bestglide-fishing-kit"><td class="chk-col"><input type="checkbox" data-item="bestglide-fishing-kit" data-weight="20" data-vol="0.05"></td><td class="item">Best Glide Compact Survival Fishing Kit</td><td class="num">~20 g (0.7 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td></tr>
+        <tr data-id="off-deep-woods"><td class="chk-col"><input type="checkbox" data-item="off-deep-woods" data-weight="254" data-vol="0.5"></td><td class="item">OFF! Deep Woods 6 oz aerosol</td><td class="num">254 g (0.56 lb)</td><td class="num">~0.5 L</td></tr>
+        <tr data-id="wet-naps"><td class="chk-col"><input type="checkbox" data-item="wet-naps" data-weight="25" data-vol="0.02"></td><td class="item">Wet naps, 6 individual packets</td><td class="num">~25 g (0.9 oz)<span class="est">est.</span></td><td class="num">~0.02 L</td></tr>
+        <tr data-id="madison-trauma-shears"><td class="chk-col"><input type="checkbox" data-item="madison-trauma-shears" data-weight="150" data-vol="0.15"></td><td class="item">Madison Supply trauma shears (7.5")</td><td class="num">150 g (5.3 oz)</td><td class="num">~0.15 L</td></tr>
+        <tr data-id="curved-hemostat"><td class="chk-col"><input type="checkbox" data-item="curved-hemostat" data-weight="57" data-vol="0.01"></td><td class="item">Curved hemostat, 6"</td><td class="num">57 g (2 oz)</td><td class="num">~0.01 L</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Trip Totals <span style="text-transform:none; letter-spacing:0; font-weight:400; color:var(--text-muted); font-size:0.7rem;">(full planned load, everything packed)</span></h2>
+  <div class="table-scroll">
+    <table class="totals-table">
+      <thead>
+        <tr><th></th><th>Total</th><th>Target</th><th>Difference</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="item">Total weight (all items, incl. backpack)</td>
+          <td class="num">~14.0 lb (6,337 g)</td>
+          <td class="num">35 lb</td>
+          <td class="num diff-good">21.0 lb under <span class="tag">plenty of headroom</span></td>
+        </tr>
+        <tr>
+          <td class="item">Total volume (all items, excl. backpack)</td>
+          <td class="num">~25.1 L</td>
+          <td class="num">32 L (backpack capacity)</td>
+          <td class="num diff-good">~6.9 L under <span class="tag">~78% full</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Notable Exclusions</h2>
+  <div class="exclusions">
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Reason</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="item">Food</td><td>Group trip — not responsible for this</td></tr>
+        <tr><td class="item">First aid (group kit)</td><td>Group trip — not responsible for this</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    Weights and volumes are drawn from manufacturer/retailer specs where available; items marked <span class="est">est.</span> are estimates where no verified spec was found. The dashboard above sums only what's checked off — check items as you pack to watch it climb toward the 35 lb / 32 L targets. Checklist state is saved in this browser only (via localStorage) and won't sync across devices.
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'packed-morgan-hill-2026-09-26';
+  var WEIGHT_TARGET_LB = 35;
+  var VOLUME_TARGET_L = 32;
+  var checkboxes = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"][data-item]'));
+
+  var itemsCountEl = document.getElementById('items-count');
+  var itemsTotalEl = document.getElementById('items-total');
+  var itemsFillEl = document.getElementById('items-fill');
+
+  var weightCountEl = document.getElementById('weight-count');
+  var weightFillEl = document.getElementById('weight-fill');
+  var weightNoteEl = document.getElementById('weight-note');
+
+  var volumeCountEl = document.getElementById('volume-count');
+  var volumeFillEl = document.getElementById('volume-fill');
+  var volumeNoteEl = document.getElementById('volume-note');
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function saveState(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      /* storage unavailable — checklist just won't persist */
+    }
+  }
+
+  function updateDashboard() {
+    var checked = checkboxes.filter(function (cb) { return cb.checked; });
+
+    itemsCountEl.textContent = checked.length;
+    itemsTotalEl.textContent = checkboxes.length;
+    itemsFillEl.style.width = (checkboxes.length ? (checked.length / checkboxes.length * 100) : 0) + '%';
+
+    var weightG = checked.reduce(function (sum, cb) {
+      return sum + (parseFloat(cb.getAttribute('data-weight')) || 0);
+    }, 0);
+    var weightLb = weightG / 453.592;
+
+    var volumeL = checked.reduce(function (sum, cb) {
+      if (cb.getAttribute('data-container') === 'true') return sum;
+      return sum + (parseFloat(cb.getAttribute('data-vol')) || 0);
+    }, 0);
+
+    weightCountEl.textContent = weightLb.toFixed(1);
+    var weightPct = Math.min(100, (weightLb / WEIGHT_TARGET_LB) * 100);
+    weightFillEl.style.width = weightPct + '%';
+    weightFillEl.classList.toggle('over', weightLb > WEIGHT_TARGET_LB);
+    if (weightLb > WEIGHT_TARGET_LB) {
+      weightNoteEl.textContent = 'Over target by ' + (weightLb - WEIGHT_TARGET_LB).toFixed(1) + ' lb';
+      weightNoteEl.classList.add('over');
+    } else {
+      weightNoteEl.textContent = (WEIGHT_TARGET_LB - weightLb).toFixed(1) + ' lb remaining';
+      weightNoteEl.classList.remove('over');
+    }
+
+    volumeCountEl.textContent = volumeL.toFixed(1);
+    var volumePct = Math.min(100, (volumeL / VOLUME_TARGET_L) * 100);
+    volumeFillEl.style.width = volumePct + '%';
+    volumeFillEl.classList.toggle('over', volumeL > VOLUME_TARGET_L);
+    if (volumeL > VOLUME_TARGET_L) {
+      volumeNoteEl.textContent = 'Over backpack capacity by ' + (volumeL - VOLUME_TARGET_L).toFixed(1) + ' L';
+      volumeNoteEl.classList.add('over');
+    } else {
+      volumeNoteEl.textContent = (VOLUME_TARGET_L - volumeL).toFixed(1) + ' L of pack space left';
+      volumeNoteEl.classList.remove('over');
+    }
+  }
+
+  var state = loadState();
+
+  checkboxes.forEach(function (cb) {
+    var id = cb.getAttribute('data-item');
+    if (state[id]) {
+      cb.checked = true;
+      var row = document.querySelector('tr[data-id="' + id + '"]');
+      if (row) row.classList.add('packed');
+    }
+    cb.addEventListener('change', function () {
+      var row = document.querySelector('tr[data-id="' + id + '"]');
+      if (cb.checked) {
+        state[id] = true;
+        if (row) row.classList.add('packed');
+      } else {
+        delete state[id];
+        if (row) row.classList.remove('packed');
+      }
+      saveState(state);
+      updateDashboard();
+    });
+  });
+
+  updateDashboard();
+})();
+</script>
+
+</body>
+</html>
