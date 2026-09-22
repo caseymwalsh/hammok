@@ -73,6 +73,13 @@
     margin: 0;
   }
 
+  .subtitle a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .subtitle a:hover { text-decoration: underline; }
+
   .trip-list {
     display: flex;
     flex-direction: column;
@@ -140,7 +147,7 @@
 
   <header>
     <h1>🏕️ Hammock Camping Trips</h1>
-    <p class="subtitle">Gear logs, one per trip</p>
+    <p class="subtitle">Gear logs, one per trip &middot; <a href="inventory.html">See the full gear inventory &rarr;</a></p>
   </header>
 
   <div class="trip-list">
