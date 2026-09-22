@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hammock Camping Trips</title>
+<style>
+  :root {
+    --bg: #faf8f4;
+    --surface: #ffffff;
+    --border: #e3ddd0;
+    --text: #2b2620;
+    --text-muted: #746b5c;
+    --accent: #5f7a52;
+    --accent-soft: #eef2e9;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1c1a17;
+      --surface: #26231e;
+      --border: #3a352c;
+      --text: #ece7dc;
+      --text-muted: #a89e8c;
+      --accent: #8fae7c;
+      --accent-soft: #2c3527;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #1c1a17;
+    --surface: #26231e;
+    --border: #3a352c;
+    --text: #ece7dc;
+    --text-muted: #a89e8c;
+    --accent: #8fae7c;
+    --accent-soft: #2c3527;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 1.25rem 4rem;
+  }
+
+  header {
+    margin-bottom: 2.25rem;
+  }
+
+  h1 {
+    font-size: 1.7rem;
+    margin: 0 0 0.35rem;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .trip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  a.trip-card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.1rem 1.3rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  a.trip-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .trip-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0 0 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .trip-meta {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .arrow {
+    margin-left: auto;
+    color: var(--accent);
+    font-size: 1.1rem;
+  }
+
+  .trip-name-row {
+    display: flex;
+    align-items: center;
+  }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 1.4rem; }
+    .wrap { padding: 2.25rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>🏕️ Hammock Camping Trips</h1>
+    <p class="subtitle">Gear logs, one per trip</p>
+  </header>
+
+  <div class="trip-list">
+    <a class="trip-card" href="morgan-hill-2026-09-21.html">
+      <div class="trip-name-row">
+        <p class="trip-name">Morgan Hill State Forest — September 21&ndash;22, 2026</p>
+        <span class="arrow">&rarr;</span>
+      </div>
+      <p class="trip-meta">1200&ndash;1200 &middot; Overnight hammock camping</p>
+    </a>
+  </div>
+
+  <footer>
+    New trips get added here as gear logs are put together.
+  </footer>
+
+</div>
+</body>
+</html>
