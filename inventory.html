@@ -157,6 +157,21 @@
     vertical-align: middle;
   }
 
+
+  td.ess { white-space: nowrap; }
+  .tag {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 5px;
+    padding: 0.08rem 0.45rem;
+    margin: 0 0.25rem 0.2rem 0;
+  }
+  .none { color: var(--text-muted); }
+  .subtitle a { color: var(--accent); }
+
   .footnote {
     font-size: 0.82rem;
     color: var(--text-muted);
@@ -184,24 +199,24 @@
 
   <header>
     <h1>🎒 Gear Inventory</h1>
-    <p class="subtitle">All gear tracked across trips — a master reference, independent of any one outing</p>
+    <p class="subtitle">All gear tracked across trips — a master reference, independent of any one outing. The Essential column maps each item to the <a href="https://www.nps.gov/articles/10essentials.htm">NPS Ten Essentials</a>.</p>
   </header>
 
   <h2>Hammock System</h2>
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th>Item</th><th>Weight</th><th>Packed Volume</th><th>Used On</th></tr>
+        <tr><th>Item</th><th>Weight</th><th>Packed Volume</th><th>Essential</th><th>Used On</th></tr>
       </thead>
       <tbody>
-        <tr><td class="item">ENO DoubleNest hammock</td><td class="num">538 g (19 oz)</td><td class="num">1.9 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Kootek 210T hammock (body only, no straps/bag)</td><td class="num">640 g (22.6 oz)</td><td class="num">~1.8 L<span class="est">est.</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Wise Owl underquilt</td><td class="num">830 g (29.3 oz)</td><td class="num">~8 L<span class="est">est.</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Wise Owl rain fly (Wisefly tarp)</td><td class="num">740 g (26 oz)</td><td class="num">2.9 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Wise Owl bug net</td><td class="num">450 g (16 oz)</td><td class="num">5.9 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Webbing straps</td><td class="num">420 g (14.8 oz)</td><td class="num">~0.4 L<span class="est">est.</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Wise Owl tent stakes (4, aluminum)</td><td class="num">52 g (1.8 oz)</td><td class="num">~0.1 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">~100 ft of 550 paracord</td><td class="num">~300 g (0.66 lb)</td><td class="num">~0.4–0.5 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">ENO DoubleNest hammock</td><td class="num">538 g (19 oz)</td><td class="num">1.9 L</td><td class="ess"><span class="tag">Shelter</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Kootek 210T hammock (body only, no straps/bag)</td><td class="num">640 g (22.6 oz)</td><td class="num">~1.8 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Wise Owl underquilt</td><td class="num">830 g (29.3 oz)</td><td class="num">~8 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Wise Owl rain fly (Wisefly tarp)</td><td class="num">740 g (26 oz)</td><td class="num">2.9 L</td><td class="ess"><span class="tag">Shelter</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Wise Owl bug net</td><td class="num">450 g (16 oz)</td><td class="num">5.9 L</td><td class="ess"><span class="tag">Shelter</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Webbing straps</td><td class="num">420 g (14.8 oz)</td><td class="num">~0.4 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Wise Owl tent stakes (4, aluminum)</td><td class="num">52 g (1.8 oz)</td><td class="num">~0.1 L</td><td class="ess"><span class="tag">Shelter</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">~100 ft of 550 paracord</td><td class="num">~300 g (0.66 lb)</td><td class="num">~0.4–0.5 L</td><td class="ess"><span class="tag">Shelter</span><span class="tag">Repair &amp; Tools</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
       </tbody>
     </table>
   </div>
@@ -211,18 +226,18 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Used On</th></tr>
+        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th><th>Used On</th></tr>
       </thead>
       <tbody>
-        <tr><td class="item">EMS Creek Freak 32L backpack</td><td class="num">890 g (1.96 lb)</td><td class="num">32 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Backpack rain cover</td><td class="num">80 g (2.8 oz)</td><td class="num">~0.15 L<span class="est">est.</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Black Diamond Cosmo 350 headlamp</td><td class="num">79 g (2.8 oz)</td><td class="num">~0.1 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Sea to Summit Frontier bowl (medium)</td><td class="num">62 g (2.2 oz)</td><td class="num">0.68 L cap.</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Nalgene 32 oz wide-mouth bottle</td><td class="num">177 g (6.25 oz)</td><td class="num">0.95 L cap.</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Arrowhead Equipment Cub Pillow</td><td class="num">~85 g (3 oz)</td><td class="num">~0.3–0.5 L<span class="est">est.</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Sea to Summit Frontier long spork</td><td class="num">11 g (0.4 oz)</td><td class="num">~0.08 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Wise Owl 10L dry bag</td><td class="num">~85 g (3 oz)<span class="est">est.</span></td><td class="num">10 L cap.</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Sunwill travel mug</td><td class="num">280 g (9.9 oz)</td><td class="num">0.59 L cap.<span class="est">est.</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">EMS Creek Freak 32L backpack</td><td class="num">890 g (1.96 lb)</td><td class="num">32 L</td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Backpack rain cover</td><td class="num">80 g (2.8 oz)</td><td class="num">~0.15 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Black Diamond Cosmo 350 headlamp</td><td class="num">79 g (2.8 oz)</td><td class="num">~0.1 L</td><td class="ess"><span class="tag">Illumination</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Sea to Summit Frontier bowl (medium)</td><td class="num">62 g (2.2 oz)</td><td class="num">0.68 L cap.</td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Nalgene 32 oz wide-mouth bottle</td><td class="num">177 g (6.25 oz)</td><td class="num">0.95 L cap.</td><td class="ess"><span class="tag">Hydration</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Arrowhead Equipment Cub Pillow</td><td class="num">~85 g (3 oz)</td><td class="num">~0.3–0.5 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Sea to Summit Frontier long spork</td><td class="num">11 g (0.4 oz)</td><td class="num">~0.08 L</td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Wise Owl 10L dry bag</td><td class="num">~85 g (3 oz)<span class="est">est.</span></td><td class="num">10 L cap.</td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Sunwill travel mug</td><td class="num">280 g (9.9 oz)</td><td class="num">0.59 L cap.<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
       </tbody>
     </table>
   </div>
@@ -231,13 +246,13 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Used On</th></tr>
+        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th><th>Used On</th></tr>
       </thead>
       <tbody>
-        <tr><td class="item">Purple BIC lighter</td><td class="num">~20 g (0.7 oz)</td><td class="num">~0.03 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Telescopic pocket bellows</td><td class="num">~50 g (1.8 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Pill bottle, Vaseline-soaked cotton balls</td><td class="num">~30–35 g (1.1–1.2 oz)<span class="est">est.</span></td><td class="num">~0.04 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Überleben Hexa ferro rod, 1/2"</td><td class="num">119 g (4.2 oz)</td><td class="num">~0.02 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Purple BIC lighter</td><td class="num">~20 g (0.7 oz)</td><td class="num">~0.03 L</td><td class="ess"><span class="tag">Fire</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Telescopic pocket bellows</td><td class="num">~50 g (1.8 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td><td class="ess"><span class="tag">Fire</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Pill bottle, Vaseline-soaked cotton balls</td><td class="num">~30–35 g (1.1–1.2 oz)<span class="est">est.</span></td><td class="num">~0.04 L</td><td class="ess"><span class="tag">Fire</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Überleben Hexa ferro rod, 1/2"</td><td class="num">119 g (4.2 oz)</td><td class="num">~0.02 L</td><td class="ess"><span class="tag">Fire</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
       </tbody>
     </table>
   </div>
@@ -246,12 +261,12 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Used On</th></tr>
+        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th><th>Used On</th></tr>
       </thead>
       <tbody>
-        <tr><td class="item">Morakniv Companion, stainless, w/ sheath</td><td class="num">~160 g (5.6 oz)<span class="est">est.</span></td><td class="num">~0.13 L<span class="est">est.</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Madison Supply trauma shears (7.5")</td><td class="num">150 g (5.3 oz)</td><td class="num">~0.15 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Curved hemostat, 6"</td><td class="num">57 g (2 oz)</td><td class="num">~0.01 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Morakniv Companion, stainless, w/ sheath</td><td class="num">~160 g (5.6 oz)<span class="est">est.</span></td><td class="num">~0.13 L<span class="est">est.</span></td><td class="ess"><span class="tag">Repair &amp; Tools</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Madison Supply trauma shears (7.5")</td><td class="num">150 g (5.3 oz)</td><td class="num">~0.15 L</td><td class="ess"><span class="tag">Repair &amp; Tools</span><span class="tag">First Aid</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Curved hemostat, 6"</td><td class="num">57 g (2 oz)</td><td class="num">~0.01 L</td><td class="ess"><span class="tag">Repair &amp; Tools</span><span class="tag">First Aid</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
       </tbody>
     </table>
   </div>
@@ -260,14 +275,14 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Used On</th></tr>
+        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th><th>Used On</th></tr>
       </thead>
       <tbody>
-        <tr><td class="item">Whistle</td><td class="num">~10 g (0.35 oz)<span class="est">est.</span></td><td class="num">negligible</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Hand warmers, 2 bags (2-pack each)</td><td class="num">~110 g (3.9 oz)<span class="est">est.</span></td><td class="num">~0.1 L<span class="est">est.</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Best Glide Compact Survival Fishing Kit</td><td class="num">~20 g (0.7 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">OFF! Deep Woods 6 oz aerosol</td><td class="num">254 g (0.56 lb)</td><td class="num">~0.5 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
-        <tr><td class="item">Wet naps, 6 individual packets</td><td class="num">~25 g (0.9 oz)<span class="est">est.</span></td><td class="num">~0.02 L</td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Whistle</td><td class="num">~10 g (0.35 oz)<span class="est">est.</span></td><td class="num">negligible</td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Hand warmers, 2 bags (2-pack each)</td><td class="num">~110 g (3.9 oz)<span class="est">est.</span></td><td class="num">~0.1 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Best Glide Compact Survival Fishing Kit</td><td class="num">~20 g (0.7 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">OFF! Deep Woods 6 oz aerosol</td><td class="num">254 g (0.56 lb)</td><td class="num">~0.5 L</td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
+        <tr><td class="item">Wet naps, 6 individual packets</td><td class="num">~25 g (0.9 oz)<span class="est">est.</span></td><td class="num">~0.02 L</td><td class="ess"><span class="none">&mdash;</span></td><td class="used-on"><a href="morgan-hill-2026-09-26.html">Morgan Hill (Sept 26&ndash;27, 2026)</a></td></tr>
       </tbody>
     </table>
   </div>
@@ -276,19 +291,19 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th>Item</th><th>Notes</th></tr>
+        <tr><th>Item</th><th>Essential</th><th>Notes</th></tr>
       </thead>
       <tbody>
-        <tr><td class="item">Closed-cell foam sleeping pad</td><td>For under-hammock insulation on colder trips, or as a ground pad</td></tr>
-        <tr><td class="item">Closed-cell foam sitting pad</td><td>Camp comfort / insulation off cold or wet ground</td></tr>
-        <tr><td class="item">Water filtration (options TBD)</td><td>Comparing squeeze filters, gravity systems, and straw-style options</td></tr>
-        <tr><td class="item">Jetboil-style stove system</td><td>Integrated canister stove/pot combo for boiling water and simple meals</td></tr>
-        <tr><td class="item">Bishop bag</td><td></td></tr>
-        <tr><td class="item">Dyneema straps + associated hardware</td><td>Lighter-weight swap for the current webbing straps</td></tr>
-        <tr><td class="item">Top quilt</td><td>Above-body insulation to pair with the underquilt — currently no dedicated warmth layer on top</td></tr>
-        <tr><td class="item">Map &amp; compass</td><td>No navigation tool currently tracked — worth having independent of phone battery/signal</td></tr>
-        <tr><td class="item">Bear bag / bear-resistant canister + hang line</td><td>No food storage/protection method tracked yet; relevant for NY state forest sites</td></tr>
-        <tr><td class="item">Small power bank</td><td>Backup charge for phone/headlamp on the 24-hour, noon-to-noon window</td></tr>
+        <tr><td class="item">Closed-cell foam sleeping pad</td><td class="ess"><span class="none">&mdash;</span></td><td>For under-hammock insulation on colder trips, or as a ground pad</td></tr>
+        <tr><td class="item">Closed-cell foam sitting pad</td><td class="ess"><span class="none">&mdash;</span></td><td>Camp comfort / insulation off cold or wet ground</td></tr>
+        <tr><td class="item">Water filtration (options TBD)</td><td class="ess"><span class="tag">Hydration</span></td><td>Comparing squeeze filters, gravity systems, and straw-style options</td></tr>
+        <tr><td class="item">Jetboil-style stove system</td><td class="ess"><span class="none">&mdash;</span></td><td>Integrated canister stove/pot combo for boiling water and simple meals</td></tr>
+        <tr><td class="item">Bishop bag</td><td class="ess"><span class="none">&mdash;</span></td><td></td></tr>
+        <tr><td class="item">Dyneema straps + associated hardware</td><td class="ess"><span class="tag">Shelter</span></td><td>Lighter-weight swap for the current webbing straps</td></tr>
+        <tr><td class="item">Top quilt</td><td class="ess"><span class="none">&mdash;</span></td><td>Above-body insulation to pair with the underquilt — currently no dedicated warmth layer on top</td></tr>
+        <tr><td class="item">Map &amp; compass</td><td class="ess"><span class="tag">Navigation</span></td><td>No navigation tool currently tracked — worth having independent of phone battery/signal</td></tr>
+        <tr><td class="item">Bear bag / bear-resistant canister + hang line</td><td class="ess"><span class="none">&mdash;</span></td><td>No food storage/protection method tracked yet; relevant for NY state forest sites</td></tr>
+        <tr><td class="item">Small power bank</td><td class="ess"><span class="tag">Navigation</span><span class="tag">Illumination</span></td><td>Backup charge for phone/headlamp on the 24-hour, noon-to-noon window</td></tr>
       </tbody>
     </table>
   </div>
