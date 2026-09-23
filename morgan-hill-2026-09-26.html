@@ -259,6 +259,19 @@
     vertical-align: middle;
   }
 
+  td.ess { white-space: nowrap; }
+  td.ess .tag {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 5px;
+    padding: 0.08rem 0.45rem;
+    margin: 0 0.25rem 0.2rem 0;
+  }
+  td.ess .none { color: var(--text-muted); }
+
   .footnote {
     font-size: 0.82rem;
     color: var(--text-muted);
@@ -345,17 +358,17 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Packed Volume</th></tr>
+        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Packed Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
-        <tr data-id="eno-doublenest"><td class="chk-col"><input type="checkbox" data-item="eno-doublenest" data-weight="538" data-vol="1.9"></td><td class="item">ENO DoubleNest hammock</td><td class="num">538 g (19 oz)</td><td class="num">1.9 L</td></tr>
-        <tr data-id="kootek-body"><td class="chk-col"><input type="checkbox" data-item="kootek-body" data-weight="640" data-vol="1.8"></td><td class="item">Kootek 210T hammock (body only, no straps/bag)</td><td class="num">640 g (22.6 oz)</td><td class="num">~1.8 L<span class="est">est.</span></td></tr>
-        <tr data-id="wise-owl-underquilt"><td class="chk-col"><input type="checkbox" data-item="wise-owl-underquilt" data-weight="830" data-vol="8"></td><td class="item">Wise Owl underquilt</td><td class="num">830 g (29.3 oz)</td><td class="num">~8 L<span class="est">est.</span></td></tr>
-        <tr data-id="wise-owl-rainfly"><td class="chk-col"><input type="checkbox" data-item="wise-owl-rainfly" data-weight="740" data-vol="2.9"></td><td class="item">Wise Owl rain fly (Wisefly tarp)</td><td class="num">740 g (26 oz)</td><td class="num">2.9 L</td></tr>
-        <tr data-id="wise-owl-bugnet"><td class="chk-col"><input type="checkbox" data-item="wise-owl-bugnet" data-weight="450" data-vol="5.9"></td><td class="item">Wise Owl bug net</td><td class="num">450 g (16 oz)</td><td class="num">5.9 L</td></tr>
-        <tr data-id="webbing-straps"><td class="chk-col"><input type="checkbox" data-item="webbing-straps" data-weight="420" data-vol="0.4"></td><td class="item">Webbing straps</td><td class="num">420 g (14.8 oz)</td><td class="num">~0.4 L<span class="est">est.</span></td></tr>
-        <tr data-id="tent-stakes-4"><td class="chk-col"><input type="checkbox" data-item="tent-stakes-4" data-weight="52" data-vol="0.1"></td><td class="item">Wise Owl tent stakes (4, aluminum)</td><td class="num">52 g (1.8 oz)</td><td class="num">~0.1 L</td></tr>
-        <tr data-id="paracord-100ft"><td class="chk-col"><input type="checkbox" data-item="paracord-100ft" data-weight="300" data-vol="0.45"></td><td class="item">~100 ft of 550 paracord</td><td class="num">~300 g (0.66 lb)</td><td class="num">~0.4–0.5 L</td></tr>
+        <tr data-id="eno-doublenest"><td class="chk-col"><input type="checkbox" data-item="eno-doublenest" data-weight="538" data-vol="1.9"></td><td class="item">ENO DoubleNest hammock</td><td class="num">538 g (19 oz)</td><td class="num">1.9 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr data-id="kootek-body"><td class="chk-col"><input type="checkbox" data-item="kootek-body" data-weight="640" data-vol="1.8"></td><td class="item">Kootek 210T hammock (body only, no straps/bag)</td><td class="num">640 g (22.6 oz)</td><td class="num">~1.8 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr data-id="wise-owl-underquilt"><td class="chk-col"><input type="checkbox" data-item="wise-owl-underquilt" data-weight="830" data-vol="8"></td><td class="item">Wise Owl underquilt</td><td class="num">830 g (29.3 oz)</td><td class="num">~8 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr data-id="wise-owl-rainfly"><td class="chk-col"><input type="checkbox" data-item="wise-owl-rainfly" data-weight="740" data-vol="2.9"></td><td class="item">Wise Owl rain fly (Wisefly tarp)</td><td class="num">740 g (26 oz)</td><td class="num">2.9 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr data-id="wise-owl-bugnet"><td class="chk-col"><input type="checkbox" data-item="wise-owl-bugnet" data-weight="450" data-vol="5.9"></td><td class="item">Wise Owl bug net</td><td class="num">450 g (16 oz)</td><td class="num">5.9 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr data-id="webbing-straps"><td class="chk-col"><input type="checkbox" data-item="webbing-straps" data-weight="420" data-vol="0.4"></td><td class="item">Webbing straps</td><td class="num">420 g (14.8 oz)</td><td class="num">~0.4 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr data-id="tent-stakes-4"><td class="chk-col"><input type="checkbox" data-item="tent-stakes-4" data-weight="52" data-vol="0.1"></td><td class="item">Wise Owl tent stakes (4, aluminum)</td><td class="num">52 g (1.8 oz)</td><td class="num">~0.1 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr data-id="paracord-100ft"><td class="chk-col"><input type="checkbox" data-item="paracord-100ft" data-weight="300" data-vol="0.45"></td><td class="item">~100 ft of 550 paracord</td><td class="num">~300 g (0.66 lb)</td><td class="num">~0.4–0.5 L</td><td class="ess"><span class="tag">Shelter</span><span class="tag">Repair &amp; Tools</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -365,19 +378,19 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th></tr>
+        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
-        <tr data-id="ems-creek-freak"><td class="chk-col"><input type="checkbox" data-item="ems-creek-freak" data-weight="890" data-vol="0" data-container="true"></td><td class="item">EMS Creek Freak 32L backpack<span class="container-tag">container</span></td><td class="num">890 g (1.96 lb)</td><td class="num">32 L</td></tr>
-        <tr data-id="backpack-rain-cover"><td class="chk-col"><input type="checkbox" data-item="backpack-rain-cover" data-weight="80" data-vol="0.15"></td><td class="item">Backpack rain cover</td><td class="num">80 g (2.8 oz)</td><td class="num">~0.15 L<span class="est">est.</span></td></tr>
-        <tr data-id="bd-cosmo-350"><td class="chk-col"><input type="checkbox" data-item="bd-cosmo-350" data-weight="79" data-vol="0.1"></td><td class="item">Black Diamond Cosmo 350 headlamp</td><td class="num">79 g (2.8 oz)</td><td class="num">~0.1 L</td></tr>
-        <tr data-id="s2s-bowl"><td class="chk-col"><input type="checkbox" data-item="s2s-bowl" data-weight="62" data-vol="0.36"></td><td class="item">Sea to Summit Frontier bowl (medium)</td><td class="num">62 g (2.2 oz)</td><td class="num">0.68 L cap.</td></tr>
-        <tr data-id="nalgene-32oz"><td class="chk-col"><input type="checkbox" data-item="nalgene-32oz" data-weight="177" data-vol="0.95"></td><td class="item">Nalgene 32 oz wide-mouth bottle</td><td class="num">177 g (6.25 oz)</td><td class="num">0.95 L cap.</td></tr>
-        <tr data-id="sawyer-squeeze"><td class="chk-col"><input type="checkbox" data-item="sawyer-squeeze" data-weight="145" data-vol="0.4"></td><td class="item">Sawyer Squeeze SP129 filter + two 32 oz pouches</td><td class="num">~145 g (5.1 oz)<span class="est">est.</span></td><td class="num">~0.4 L packed<span class="est">est.</span>; 1.9 L cap.</td></tr>
-        <tr data-id="cub-pillow"><td class="chk-col"><input type="checkbox" data-item="cub-pillow" data-weight="85" data-vol="0.4"></td><td class="item">Arrowhead Equipment Cub Pillow</td><td class="num">~85 g (3 oz)</td><td class="num">~0.3–0.5 L<span class="est">est.</span></td></tr>
-        <tr data-id="s2s-spork"><td class="chk-col"><input type="checkbox" data-item="s2s-spork" data-weight="11" data-vol="0.08"></td><td class="item">Sea to Summit Frontier long spork</td><td class="num">11 g (0.4 oz)</td><td class="num">~0.08 L</td></tr>
-        <tr data-id="wise-owl-stuffsack"><td class="chk-col"><input type="checkbox" data-item="wise-owl-stuffsack" data-weight="85" data-vol="0.1"></td><td class="item">Wise Owl 10L dry bag</td><td class="num">~85 g (3 oz)<span class="est">est.</span></td><td class="num">10 L cap.</td></tr>
-        <tr data-id="sunwill-mug"><td class="chk-col"><input type="checkbox" data-item="sunwill-mug" data-weight="280" data-vol="0.55"></td><td class="item">Sunwill travel mug</td><td class="num">280 g (9.9 oz)</td><td class="num">0.59 L cap.<span class="est">est.</span></td></tr>
+        <tr data-id="ems-creek-freak"><td class="chk-col"><input type="checkbox" data-item="ems-creek-freak" data-weight="890" data-vol="0" data-container="true"></td><td class="item">EMS Creek Freak 32L backpack<span class="container-tag">container</span></td><td class="num">890 g (1.96 lb)</td><td class="num">32 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr data-id="backpack-rain-cover"><td class="chk-col"><input type="checkbox" data-item="backpack-rain-cover" data-weight="80" data-vol="0.15"></td><td class="item">Backpack rain cover</td><td class="num">80 g (2.8 oz)</td><td class="num">~0.15 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr data-id="bd-cosmo-350"><td class="chk-col"><input type="checkbox" data-item="bd-cosmo-350" data-weight="79" data-vol="0.1"></td><td class="item">Black Diamond Cosmo 350 headlamp</td><td class="num">79 g (2.8 oz)</td><td class="num">~0.1 L</td><td class="ess"><span class="tag">Illumination</span></td></tr>
+        <tr data-id="s2s-bowl"><td class="chk-col"><input type="checkbox" data-item="s2s-bowl" data-weight="62" data-vol="0.36"></td><td class="item">Sea to Summit Frontier bowl (medium)</td><td class="num">62 g (2.2 oz)</td><td class="num">0.68 L cap.</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr data-id="nalgene-32oz"><td class="chk-col"><input type="checkbox" data-item="nalgene-32oz" data-weight="177" data-vol="0.95"></td><td class="item">Nalgene 32 oz wide-mouth bottle</td><td class="num">177 g (6.25 oz)</td><td class="num">0.95 L cap.</td><td class="ess"><span class="tag">Hydration</span></td></tr>
+        <tr data-id="sawyer-squeeze"><td class="chk-col"><input type="checkbox" data-item="sawyer-squeeze" data-weight="145" data-vol="0.4"></td><td class="item">Sawyer Squeeze SP129 filter + two 32 oz pouches</td><td class="num">~145 g (5.1 oz)<span class="est">est.</span></td><td class="num">~0.4 L packed<span class="est">est.</span>; 1.9 L cap.</td><td class="ess"><span class="tag">Hydration</span></td></tr>
+        <tr data-id="cub-pillow"><td class="chk-col"><input type="checkbox" data-item="cub-pillow" data-weight="85" data-vol="0.4"></td><td class="item">Arrowhead Equipment Cub Pillow</td><td class="num">~85 g (3 oz)</td><td class="num">~0.3–0.5 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr data-id="s2s-spork"><td class="chk-col"><input type="checkbox" data-item="s2s-spork" data-weight="11" data-vol="0.08"></td><td class="item">Sea to Summit Frontier long spork</td><td class="num">11 g (0.4 oz)</td><td class="num">~0.08 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr data-id="wise-owl-stuffsack"><td class="chk-col"><input type="checkbox" data-item="wise-owl-stuffsack" data-weight="85" data-vol="0.1"></td><td class="item">Wise Owl 10L dry bag</td><td class="num">~85 g (3 oz)<span class="est">est.</span></td><td class="num">10 L cap.</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr data-id="sunwill-mug"><td class="chk-col"><input type="checkbox" data-item="sunwill-mug" data-weight="280" data-vol="0.55"></td><td class="item">Sunwill travel mug</td><td class="num">280 g (9.9 oz)</td><td class="num">0.59 L cap.<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -387,13 +400,13 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th></tr>
+        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
-        <tr data-id="bic-lighter"><td class="chk-col"><input type="checkbox" data-item="bic-lighter" data-weight="20" data-vol="0.03"></td><td class="item">Purple BIC lighter</td><td class="num">~20 g (0.7 oz)</td><td class="num">~0.03 L</td></tr>
-        <tr data-id="pocket-bellows"><td class="chk-col"><input type="checkbox" data-item="pocket-bellows" data-weight="50" data-vol="0.05"></td><td class="item">Telescopic pocket bellows</td><td class="num">~50 g (1.8 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td></tr>
-        <tr data-id="vaseline-cotton"><td class="chk-col"><input type="checkbox" data-item="vaseline-cotton" data-weight="32" data-vol="0.04"></td><td class="item">Pill bottle, Vaseline-soaked cotton balls</td><td class="num">~30–35 g (1.1–1.2 oz)<span class="est">est.</span></td><td class="num">~0.04 L</td></tr>
-        <tr data-id="uberleben-hexa"><td class="chk-col"><input type="checkbox" data-item="uberleben-hexa" data-weight="119" data-vol="0.02"></td><td class="item">Überleben Hexa ferro rod, 1/2"</td><td class="num">119 g (4.2 oz)</td><td class="num">~0.02 L</td></tr>
+        <tr data-id="bic-lighter"><td class="chk-col"><input type="checkbox" data-item="bic-lighter" data-weight="20" data-vol="0.03"></td><td class="item">Purple BIC lighter</td><td class="num">~20 g (0.7 oz)</td><td class="num">~0.03 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
+        <tr data-id="pocket-bellows"><td class="chk-col"><input type="checkbox" data-item="pocket-bellows" data-weight="50" data-vol="0.05"></td><td class="item">Telescopic pocket bellows</td><td class="num">~50 g (1.8 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
+        <tr data-id="vaseline-cotton"><td class="chk-col"><input type="checkbox" data-item="vaseline-cotton" data-weight="32" data-vol="0.04"></td><td class="item">Pill bottle, Vaseline-soaked cotton balls</td><td class="num">~30–35 g (1.1–1.2 oz)<span class="est">est.</span></td><td class="num">~0.04 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
+        <tr data-id="uberleben-hexa"><td class="chk-col"><input type="checkbox" data-item="uberleben-hexa" data-weight="119" data-vol="0.02"></td><td class="item">Überleben Hexa ferro rod, 1/2"</td><td class="num">119 g (4.2 oz)</td><td class="num">~0.02 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -402,12 +415,12 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th></tr>
+        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
-        <tr data-id="morakniv-companion"><td class="chk-col"><input type="checkbox" data-item="morakniv-companion" data-weight="160" data-vol="0.13"></td><td class="item">Morakniv Companion, stainless, w/ sheath</td><td class="num">~160 g (5.6 oz)<span class="est">est.</span></td><td class="num">~0.13 L<span class="est">est.</span></td></tr>
-        <tr data-id="madison-trauma-shears"><td class="chk-col"><input type="checkbox" data-item="madison-trauma-shears" data-weight="150" data-vol="0.15"></td><td class="item">Madison Supply trauma shears (7.5")</td><td class="num">150 g (5.3 oz)</td><td class="num">~0.15 L</td></tr>
-        <tr data-id="curved-hemostat"><td class="chk-col"><input type="checkbox" data-item="curved-hemostat" data-weight="57" data-vol="0.01"></td><td class="item">Curved hemostat, 6"</td><td class="num">57 g (2 oz)</td><td class="num">~0.01 L</td></tr>
+        <tr data-id="morakniv-companion"><td class="chk-col"><input type="checkbox" data-item="morakniv-companion" data-weight="160" data-vol="0.13"></td><td class="item">Morakniv Companion, stainless, w/ sheath</td><td class="num">~160 g (5.6 oz)<span class="est">est.</span></td><td class="num">~0.13 L<span class="est">est.</span></td><td class="ess"><span class="tag">Repair &amp; Tools</span></td></tr>
+        <tr data-id="madison-trauma-shears"><td class="chk-col"><input type="checkbox" data-item="madison-trauma-shears" data-weight="150" data-vol="0.15"></td><td class="item">Madison Supply trauma shears (7.5")</td><td class="num">150 g (5.3 oz)</td><td class="num">~0.15 L</td><td class="ess"><span class="tag">Repair &amp; Tools</span><span class="tag">First Aid</span></td></tr>
+        <tr data-id="curved-hemostat"><td class="chk-col"><input type="checkbox" data-item="curved-hemostat" data-weight="57" data-vol="0.01"></td><td class="item">Curved hemostat, 6"</td><td class="num">57 g (2 oz)</td><td class="num">~0.01 L</td><td class="ess"><span class="tag">Repair &amp; Tools</span><span class="tag">First Aid</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -416,14 +429,14 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th></tr>
+        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
-        <tr data-id="whistle"><td class="chk-col"><input type="checkbox" data-item="whistle" data-weight="10" data-vol="0.01"></td><td class="item">Whistle</td><td class="num">~10 g (0.35 oz)<span class="est">est.</span></td><td class="num">negligible</td></tr>
-        <tr data-id="hand-warmers"><td class="chk-col"><input type="checkbox" data-item="hand-warmers" data-weight="110" data-vol="0.1"></td><td class="item">Hand warmers, 2 bags (2-pack each)</td><td class="num">~110 g (3.9 oz)<span class="est">est.</span></td><td class="num">~0.1 L<span class="est">est.</span></td></tr>
-        <tr data-id="bestglide-fishing-kit"><td class="chk-col"><input type="checkbox" data-item="bestglide-fishing-kit" data-weight="20" data-vol="0.05"></td><td class="item">Best Glide Compact Survival Fishing Kit</td><td class="num">~20 g (0.7 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td></tr>
-        <tr data-id="off-deep-woods"><td class="chk-col"><input type="checkbox" data-item="off-deep-woods" data-weight="254" data-vol="0.5"></td><td class="item">OFF! Deep Woods 6 oz aerosol</td><td class="num">254 g (0.56 lb)</td><td class="num">~0.5 L</td></tr>
-        <tr data-id="wet-naps"><td class="chk-col"><input type="checkbox" data-item="wet-naps" data-weight="25" data-vol="0.02"></td><td class="item">Wet naps, 6 individual packets</td><td class="num">~25 g (0.9 oz)<span class="est">est.</span></td><td class="num">~0.02 L</td></tr>
+        <tr data-id="whistle"><td class="chk-col"><input type="checkbox" data-item="whistle" data-weight="10" data-vol="0.01"></td><td class="item">Whistle</td><td class="num">~10 g (0.35 oz)<span class="est">est.</span></td><td class="num">negligible</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr data-id="hand-warmers"><td class="chk-col"><input type="checkbox" data-item="hand-warmers" data-weight="110" data-vol="0.1"></td><td class="item">Hand warmers, 2 bags (2-pack each)</td><td class="num">~110 g (3.9 oz)<span class="est">est.</span></td><td class="num">~0.1 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr data-id="bestglide-fishing-kit"><td class="chk-col"><input type="checkbox" data-item="bestglide-fishing-kit" data-weight="20" data-vol="0.05"></td><td class="item">Best Glide Compact Survival Fishing Kit</td><td class="num">~20 g (0.7 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr data-id="off-deep-woods"><td class="chk-col"><input type="checkbox" data-item="off-deep-woods" data-weight="254" data-vol="0.5"></td><td class="item">OFF! Deep Woods 6 oz aerosol</td><td class="num">254 g (0.56 lb)</td><td class="num">~0.5 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr data-id="wet-naps"><td class="chk-col"><input type="checkbox" data-item="wet-naps" data-weight="25" data-vol="0.02"></td><td class="item">Wet naps, 6 individual packets</td><td class="num">~25 g (0.9 oz)<span class="est">est.</span></td><td class="num">~0.02 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
       </tbody>
     </table>
   </div>
