@@ -304,6 +304,13 @@
     cursor: pointer;
   }
 
+  th.chk-col input[type="checkbox"] {
+    width: 1.05rem;
+    height: 1.05rem;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
   tr.packed td.item {
     color: var(--text-muted);
     text-decoration: line-through;
@@ -429,7 +436,7 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Packed Volume</th><th>Essential</th></tr>
+        <tr><th class="chk-col"><input type="checkbox" class="group-toggle" title="Check/uncheck this whole group"></th><th>Item</th><th>Weight</th><th>Packed Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
         <tr data-id="eno-doublenest"><td class="chk-col"><input type="checkbox" data-item="eno-doublenest" data-weight="538" data-vol="1.9" data-ess="Shelter"></td><td class="item">ENO DoubleNest hammock</td><td class="num">538 g (19 oz)</td><td class="num">1.9 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
@@ -449,7 +456,7 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
+        <tr><th class="chk-col"><input type="checkbox" class="group-toggle" title="Check/uncheck this whole group"></th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
         <tr data-id="ems-creek-freak"><td class="chk-col"><input type="checkbox" data-item="ems-creek-freak" data-weight="890" data-vol="0" data-container="true" data-ess=""></td><td class="item">EMS Creek Freak 32L backpack<span class="container-tag">container</span></td><td class="num">890 g (1.96 lb)</td><td class="num">32 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
@@ -471,7 +478,7 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
+        <tr><th class="chk-col"><input type="checkbox" class="group-toggle" title="Check/uncheck this whole group"></th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
         <tr data-id="bic-lighter"><td class="chk-col"><input type="checkbox" data-item="bic-lighter" data-weight="20" data-vol="0.03" data-ess="Fire"></td><td class="item">Purple BIC lighter</td><td class="num">~20 g (0.7 oz)</td><td class="num">~0.03 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
@@ -486,7 +493,7 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
+        <tr><th class="chk-col"><input type="checkbox" class="group-toggle" title="Check/uncheck this whole group"></th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
         <tr data-id="morakniv-companion"><td class="chk-col"><input type="checkbox" data-item="morakniv-companion" data-weight="160" data-vol="0.13" data-ess="Repair & Tools"></td><td class="item">Morakniv Companion, stainless, w/ sheath</td><td class="num">~160 g (5.6 oz)<span class="est">est.</span></td><td class="num">~0.13 L<span class="est">est.</span></td><td class="ess"><span class="tag">Repair &amp; Tools</span></td></tr>
@@ -500,7 +507,7 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col">✓</th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
+        <tr><th class="chk-col"><input type="checkbox" class="group-toggle" title="Check/uncheck this whole group"></th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
         <tr data-id="whistle"><td class="chk-col"><input type="checkbox" data-item="whistle" data-weight="10" data-vol="0.01" data-ess=""></td><td class="item">Whistle</td><td class="num">~10 g (0.35 oz)<span class="est">est.</span></td><td class="num">negligible</td><td class="ess"><span class="none">&mdash;</span></td></tr>
@@ -565,6 +572,29 @@
   ];
   var checkboxes = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"][data-item]'));
 
+  var groupToggles = Array.prototype.slice.call(document.querySelectorAll('.group-toggle'));
+
+  function checkboxesForTable(table) {
+    return checkboxes.filter(function (cb) { return table.contains(cb); });
+  }
+
+  function syncGroupToggles() {
+    groupToggles.forEach(function (toggle) {
+      var table = toggle.closest('table');
+      var members = checkboxesForTable(table);
+      var checkedCount = members.filter(function (cb) { return cb.checked; }).length;
+      if (checkedCount === 0) {
+        toggle.checked = false;
+        toggle.indeterminate = false;
+      } else if (checkedCount === members.length) {
+        toggle.checked = true;
+        toggle.indeterminate = false;
+      } else {
+        toggle.checked = false;
+        toggle.indeterminate = true;
+      }
+    });
+  }
   var essGrid = document.getElementById('essentials-grid');
   var essCountEl = document.getElementById('ess-count');
   var essPills = {};
@@ -662,6 +692,8 @@
       volumeNoteEl.textContent = (VOLUME_TARGET_L - volumeL).toFixed(1) + ' L of pack space left';
       volumeNoteEl.classList.remove('over');
     }
+
+    syncGroupToggles();
   }
 
   var state = loadState();
@@ -682,6 +714,29 @@
         delete state[id];
         if (row) row.classList.remove('packed');
       }
+      saveState(state);
+      updateDashboard();
+    });
+  });
+
+  groupToggles.forEach(function (toggle) {
+    toggle.addEventListener('change', function () {
+      var table = toggle.closest('table');
+      var members = checkboxesForTable(table);
+      var makeChecked = toggle.checked;
+      members.forEach(function (cb) {
+        if (cb.checked === makeChecked) return;
+        cb.checked = makeChecked;
+        var id = cb.getAttribute('data-item');
+        var row = document.querySelector('tr[data-id="' + id + '"]');
+        if (makeChecked) {
+          state[id] = true;
+          if (row) row.classList.add('packed');
+        } else {
+          delete state[id];
+          if (row) row.classList.remove('packed');
+        }
+      });
       saveState(state);
       updateDashboard();
     });
