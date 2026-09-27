@@ -222,16 +222,43 @@
   }
 
   .stat-track {
+    position: relative;
     height: 7px;
     background: var(--accent-soft);
     border-radius: 5px;
     overflow: hidden;
   }
 
+  .stat-fill-actual {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: var(--warn);
+    z-index: 1;
+  }
+
   .stat-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
     height: 100%;
     background: var(--accent);
+    z-index: 2;
   }
+
+  .stat-legend {
+    display: flex;
+    gap: 0.9rem;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin: 0.4rem 0 1.5rem;
+  }
+
+  .stat-legend span { display: inline-flex; align-items: center; gap: 0.3rem; }
+  .stat-legend .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .stat-legend .dot.est { background: var(--accent); }
+  .stat-legend .dot.act { background: var(--warn); }
 
   .stat-note {
     font-size: 0.75rem;
@@ -471,16 +498,26 @@
     </div>
     <div class="stat-card">
       <p class="stat-label">Weight carried</p>
-      <p class="stat-value">14.9 <span class="of">/ 35 lb</span></p>
-      <div class="stat-track"><div class="stat-fill" style="width:43%"></div></div>
-      <p class="stat-note">20.1 lb under target</p>
+      <p class="stat-value">14.9 <span class="of">/ 35 lb (est.)</span></p>
+      <div class="stat-track">
+        <div class="stat-fill-actual" style="width:63%"></div>
+        <div class="stat-fill" style="width:43%"></div>
+      </div>
+      <p class="stat-note">Est. (dry, itemized): 14.9 lb &middot; Actual (loaded, scale, incl. water): 22 lb</p>
     </div>
     <div class="stat-card">
       <p class="stat-label">Volume carried</p>
-      <p class="stat-value">25.7 <span class="of">/ 32 L</span></p>
-      <div class="stat-track"><div class="stat-fill" style="width:80%"></div></div>
-      <p class="stat-note">6.3 L of pack space left</p>
+      <p class="stat-value">25.7 <span class="of">/ 32 L (est.)</span></p>
+      <div class="stat-track">
+        <div class="stat-fill-actual" style="width:100%"></div>
+        <div class="stat-fill" style="width:80%"></div>
+      </div>
+      <p class="stat-note">Est. (itemized): 25.7 L &middot; Actual: ~32 L &mdash; basically the whole bag</p>
     </div>
+  </div>
+  <div class="stat-legend">
+    <span><span class="dot est"></span>Estimate (itemized from specs)</span>
+    <span><span class="dot act"></span>Actual (measured)</span>
   </div>
 
   <h2>Hammock System</h2>
