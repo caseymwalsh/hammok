@@ -385,6 +385,37 @@
     color: var(--text-muted);
   }
 
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .photo-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .photo-card img {
+    display: block;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+  }
+
+  .photo-caption {
+    padding: 0.55rem 0.75rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 560px) {
+    .photo-grid { grid-template-columns: 1fr; }
+    .photo-card img { height: 260px; }
+  }
+
   footer {
     margin-top: 3rem;
     padding-top: 1.25rem;
@@ -576,6 +607,26 @@
         <tr><td class="item">First aid (group kit)</td><td>Group trip — not responsible for this</td></tr>
       </tbody>
     </table>
+  </div>
+
+  <h2>Photos</h2>
+  <div class="photo-grid">
+    <div class="photo-card">
+      <img src="images/morgan-hill-2026-09-26/campsite-overview.jpg" alt="Campsite overview in the woods, with multiple tarps set up along a hillside near a stream" loading="lazy">
+      <p class="photo-caption">Campsite overview — tarps strung along the hillside above the stream</p>
+    </div>
+    <div class="photo-card">
+      <img src="images/morgan-hill-2026-09-26/hammock-tarp-1.jpg" alt="Gray rain fly pitched over a black hammock" loading="lazy">
+      <p class="photo-caption">Rain fly and hammock pitched and ready</p>
+    </div>
+    <div class="photo-card">
+      <img src="images/morgan-hill-2026-09-26/hammock-tarp-2.jpg" alt="Wider view of the same hammock and rain fly setup from a different angle" loading="lazy">
+      <p class="photo-caption">Same setup, wider angle</p>
+    </div>
+    <div class="photo-card">
+      <img src="images/morgan-hill-2026-09-26/location-map.png" alt="Google Maps satellite view of Morgan Hill State Forest with a location pin" loading="lazy">
+      <p class="photo-caption">Morgan Hill State Forest — trip location</p>
+    </div>
   </div>
 
   <h2>Trip Debrief</h2>
