@@ -112,6 +112,20 @@
     margin: 0;
   }
 
+  .completed-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--good);
+    background: var(--good-soft);
+    border-radius: 5px;
+    padding: 0.15rem 0.5rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+
   .essentials-card {
     margin: 1.5rem 0 0;
     background: var(--surface);
@@ -156,7 +170,6 @@
     border: 1px solid var(--border);
     color: var(--text-muted);
     background: transparent;
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
 
   .ess-pill .dot {
@@ -218,19 +231,13 @@
   .stat-fill {
     height: 100%;
     background: var(--accent);
-    width: 0%;
-    transition: width 0.2s ease, background-color 0.2s ease;
   }
-
-  .stat-fill.over { background: var(--bad); }
 
   .stat-note {
     font-size: 0.75rem;
     color: var(--text-muted);
     margin: 0.35rem 0 0;
   }
-
-  .stat-note.over { color: var(--bad); font-weight: 600; }
 
   h2 {
     font-size: 1.05rem;
@@ -256,7 +263,7 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 0.92rem;
-    min-width: 520px;
+    min-width: 480px;
   }
 
   th, td {
@@ -290,43 +297,14 @@
     margin-left: 0.4rem;
   }
 
-  th.chk-col, td.chk-col {
-    width: 2.2rem;
-    text-align: center;
-    padding-left: 0.6rem;
-    padding-right: 0.4rem;
-  }
-
-  td.chk-col input[type="checkbox"] {
-    width: 1.05rem;
-    height: 1.05rem;
-    accent-color: var(--accent);
-    cursor: pointer;
-  }
-
-  th.chk-col input[type="checkbox"] {
-    width: 1.05rem;
-    height: 1.05rem;
-    accent-color: var(--accent);
-    cursor: pointer;
-  }
-
-  tr.packed td.item {
-    color: var(--text-muted);
-    text-decoration: line-through;
-    text-decoration-color: var(--border);
-  }
-
-  .est {
-    display: inline-block;
+  td.item .unused-tag {
     font-size: 0.72rem;
     font-weight: 600;
     color: var(--warn);
     background: var(--warn-soft);
     border-radius: 5px;
     padding: 0.05rem 0.4rem;
-    margin-left: 0.35rem;
-    vertical-align: middle;
+    margin-left: 0.4rem;
   }
 
   td.ess { white-space: nowrap; }
@@ -341,6 +319,18 @@
     margin: 0 0.25rem 0.2rem 0;
   }
   td.ess .none { color: var(--text-muted); }
+
+  .est {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--warn);
+    background: var(--warn-soft);
+    border-radius: 5px;
+    padding: 0.05rem 0.4rem;
+    margin-left: 0.35rem;
+    vertical-align: middle;
+  }
 
   .footnote {
     font-size: 0.82rem;
@@ -376,6 +366,25 @@
   .exclusions td, .exclusions th { border-bottom: 1px solid var(--exclude-border); }
   .exclusions tbody tr:last-child td { border-bottom: none; }
 
+  .debrief {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+  }
+
+  .debrief dt {
+    font-weight: 600;
+    margin-top: 0.9rem;
+  }
+
+  .debrief dt:first-child { margin-top: 0; }
+
+  .debrief dd {
+    margin: 0.2rem 0 0;
+    color: var(--text-muted);
+  }
+
   footer {
     margin-top: 3rem;
     padding-top: 1.25rem;
@@ -400,35 +409,46 @@
   <p class="breadcrumb"><a href="index.html">Trips</a> &middot; <a href="inventory.html">Gear Inventory</a></p>
 
   <header>
-    <h1>🏕️ Morgan Hill State Forest — September 26&ndash;27, 2026</h1>
-    <p class="subtitle">1200&ndash;1200 &middot; Sept 26: 64°F/50°F, 10% chance rain &middot; Sept 27: 57°F/53°F, 65% chance rain</p>
+    <h1>🏕️ Morgan Hill State Forest — September 26&ndash;27, 2026 <span class="completed-tag">Completed</span></h1>
+    <p class="subtitle">1200&ndash;1200 &middot; Actual: Sat cool &amp; dry, rain moved in Sunday on the hike out &mdash; forecast held</p>
   </header>
 
   <div class="essentials-card">
     <div class="essentials-header">
-      <span class="stat-label">Ten Essentials covered (packed items only)</span>
-      <span class="essentials-count"><strong id="ess-count">0</strong> / 10</span>
+      <span class="stat-label">Ten Essentials covered (gear actually carried)</span>
+      <span class="essentials-count"><strong>6</strong> / 10</span>
     </div>
-    <div class="essentials-grid" id="essentials-grid"></div>
+    <div class="essentials-grid">
+      <span class="ess-pill covered"><span class="dot"></span>Shelter</span>
+      <span class="ess-pill covered"><span class="dot"></span>Hydration</span>
+      <span class="ess-pill covered"><span class="dot"></span>Fire</span>
+      <span class="ess-pill covered"><span class="dot"></span>Illumination</span>
+      <span class="ess-pill covered"><span class="dot"></span>Repair &amp; Tools</span>
+      <span class="ess-pill covered"><span class="dot"></span>First Aid</span>
+      <span class="ess-pill"><span class="dot"></span>Navigation</span>
+      <span class="ess-pill"><span class="dot"></span>Sun Protection</span>
+      <span class="ess-pill"><span class="dot"></span>Insulation</span>
+      <span class="ess-pill"><span class="dot"></span>Nutrition</span>
+    </div>
   </div>
 
   <div class="dashboard">
     <div class="stat-card">
-      <p class="stat-label">Items packed</p>
-      <p class="stat-value"><span id="items-count">0</span> <span class="of">/ <span id="items-total">0</span></span></p>
-      <div class="stat-track"><div class="stat-fill" id="items-fill"></div></div>
+      <p class="stat-label">Items carried</p>
+      <p class="stat-value">32</p>
+      <div class="stat-track"><div class="stat-fill" style="width:100%"></div></div>
     </div>
     <div class="stat-card">
-      <p class="stat-label">Weight packed</p>
-      <p class="stat-value"><span id="weight-count">0.0</span> <span class="of">/ 35 lb</span></p>
-      <div class="stat-track"><div class="stat-fill" id="weight-fill"></div></div>
-      <p class="stat-note" id="weight-note"></p>
+      <p class="stat-label">Weight carried</p>
+      <p class="stat-value">16.1 <span class="of">/ 35 lb</span></p>
+      <div class="stat-track"><div class="stat-fill" style="width:46%"></div></div>
+      <p class="stat-note">18.9 lb under target</p>
     </div>
     <div class="stat-card">
-      <p class="stat-label">Volume packed</p>
-      <p class="stat-value"><span id="volume-count">0.0</span> <span class="of">/ 32 L</span></p>
-      <div class="stat-track"><div class="stat-fill" id="volume-fill"></div></div>
-      <p class="stat-note" id="volume-note"></p>
+      <p class="stat-label">Volume carried</p>
+      <p class="stat-value">27.6 <span class="of">/ 32 L</span></p>
+      <div class="stat-track"><div class="stat-fill" style="width:86%"></div></div>
+      <p class="stat-note">4.4 L of pack space left</p>
     </div>
   </div>
 
@@ -436,90 +456,94 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col"><input type="checkbox" class="group-toggle" title="Check/uncheck this whole group"></th><th>Item</th><th>Weight</th><th>Packed Volume</th><th>Essential</th></tr>
+        <tr><th>Item</th><th>Weight</th><th>Packed Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
-        <tr data-id="eno-doublenest"><td class="chk-col"><input type="checkbox" data-item="eno-doublenest" data-weight="538" data-vol="1.9" data-ess="Shelter"></td><td class="item">ENO DoubleNest hammock</td><td class="num">538 g (19 oz)</td><td class="num">1.9 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
-        <tr data-id="kootek-body"><td class="chk-col"><input type="checkbox" data-item="kootek-body" data-weight="640" data-vol="1.8" data-ess="Shelter"></td><td class="item">Kootek 210T hammock (body only, no straps/bag)</td><td class="num">640 g (22.6 oz)</td><td class="num">~1.8 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td></tr>
-        <tr data-id="wise-owl-underquilt"><td class="chk-col"><input type="checkbox" data-item="wise-owl-underquilt" data-weight="830" data-vol="8" data-ess="Shelter"></td><td class="item">Wise Owl underquilt</td><td class="num">830 g (29.3 oz)</td><td class="num">~8 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td></tr>
-        <tr data-id="wise-owl-rainfly"><td class="chk-col"><input type="checkbox" data-item="wise-owl-rainfly" data-weight="740" data-vol="2.9" data-ess="Shelter"></td><td class="item">Wise Owl rain fly (Wisefly tarp)</td><td class="num">740 g (26 oz)</td><td class="num">2.9 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
-        <tr data-id="wise-owl-bugnet"><td class="chk-col"><input type="checkbox" data-item="wise-owl-bugnet" data-weight="450" data-vol="5.9" data-ess="Shelter"></td><td class="item">Wise Owl bug net</td><td class="num">450 g (16 oz)</td><td class="num">5.9 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
-        <tr data-id="webbing-straps"><td class="chk-col"><input type="checkbox" data-item="webbing-straps" data-weight="420" data-vol="0.4" data-ess="Shelter"></td><td class="item">Webbing straps</td><td class="num">420 g (14.8 oz)</td><td class="num">~0.4 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td></tr>
-        <tr data-id="tent-stakes-4"><td class="chk-col"><input type="checkbox" data-item="tent-stakes-4" data-weight="52" data-vol="0.1" data-ess="Shelter"></td><td class="item">Wise Owl tent stakes (4, aluminum)</td><td class="num">52 g (1.8 oz)</td><td class="num">~0.1 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
-        <tr data-id="paracord-100ft"><td class="chk-col"><input type="checkbox" data-item="paracord-100ft" data-weight="300" data-vol="0.45" data-ess="Shelter,Repair & Tools"></td><td class="item">~100 ft of 550 paracord</td><td class="num">~300 g (0.66 lb)</td><td class="num">~0.4–0.5 L</td><td class="ess"><span class="tag">Shelter</span><span class="tag">Repair &amp; Tools</span></td></tr>
+        <tr><td class="item">ENO DoubleNest hammock<span class="unused-tag">carried, not slept in</span></td><td class="num">538 g (19 oz)</td><td class="num">1.9 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr><td class="item">Kootek 210T hammock (body only, no straps/bag)</td><td class="num">640 g (22.6 oz)</td><td class="num">~1.8 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr><td class="item">Wise Owl underquilt</td><td class="num">830 g (29.3 oz)</td><td class="num">~8 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr><td class="item">Wise Owl rain fly (Wisefly tarp)</td><td class="num">740 g (26 oz)</td><td class="num">2.9 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr><td class="item">Wise Owl bug net</td><td class="num">450 g (16 oz)</td><td class="num">5.9 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr><td class="item">Webbing straps</td><td class="num">420 g (14.8 oz)</td><td class="num">~0.4 L<span class="est">est.</span></td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr><td class="item">Wise Owl tent stakes (4, aluminum)</td><td class="num">52 g (1.8 oz)</td><td class="num">~0.1 L</td><td class="ess"><span class="tag">Shelter</span></td></tr>
+        <tr><td class="item">~100 ft of 550 paracord</td><td class="num">~300 g (0.66 lb)</td><td class="num">~0.4–0.5 L</td><td class="ess"><span class="tag">Shelter</span><span class="tag">Repair &amp; Tools</span></td></tr>
       </tbody>
     </table>
   </div>
-  <p class="footnote">*Wise Owl underquilt: a customer review reported actual delivered weight ran closer to double the listed spec — treat 520 g as optimistic.</p>
 
   <h2>Pack &amp; Camp Items</h2>
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col"><input type="checkbox" class="group-toggle" title="Check/uncheck this whole group"></th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
+        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
-        <tr data-id="ems-creek-freak"><td class="chk-col"><input type="checkbox" data-item="ems-creek-freak" data-weight="890" data-vol="0" data-container="true" data-ess=""></td><td class="item">EMS Creek Freak 32L backpack<span class="container-tag">container</span></td><td class="num">890 g (1.96 lb)</td><td class="num">32 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
-        <tr data-id="backpack-rain-cover"><td class="chk-col"><input type="checkbox" data-item="backpack-rain-cover" data-weight="80" data-vol="0.15" data-ess=""></td><td class="item">Backpack rain cover</td><td class="num">80 g (2.8 oz)</td><td class="num">~0.15 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
-        <tr data-id="bd-cosmo-350"><td class="chk-col"><input type="checkbox" data-item="bd-cosmo-350" data-weight="79" data-vol="0.1" data-ess="Illumination"></td><td class="item">Black Diamond Cosmo 350 headlamp</td><td class="num">79 g (2.8 oz)</td><td class="num">~0.1 L</td><td class="ess"><span class="tag">Illumination</span></td></tr>
-        <tr data-id="s2s-bowl"><td class="chk-col"><input type="checkbox" data-item="s2s-bowl" data-weight="62" data-vol="0.36" data-ess=""></td><td class="item">Sea to Summit Frontier bowl (medium)</td><td class="num">62 g (2.2 oz)</td><td class="num">0.68 L cap.</td><td class="ess"><span class="none">&mdash;</span></td></tr>
-        <tr data-id="nalgene-32oz"><td class="chk-col"><input type="checkbox" data-item="nalgene-32oz" data-weight="177" data-vol="0.95" data-ess="Hydration"></td><td class="item">Nalgene 32 oz wide-mouth bottle</td><td class="num">177 g (6.25 oz)</td><td class="num">0.95 L cap.</td><td class="ess"><span class="tag">Hydration</span></td></tr>
-        <tr data-id="sawyer-squeeze"><td class="chk-col"><input type="checkbox" data-item="sawyer-squeeze" data-weight="145" data-vol="0.4" data-ess="Hydration"></td><td class="item">Sawyer Squeeze SP129 filter + two 32 oz pouches</td><td class="num">~145 g (5.1 oz)<span class="est">est.</span></td><td class="num">~0.4 L packed<span class="est">est.</span>; 1.9 L cap.</td><td class="ess"><span class="tag">Hydration</span></td></tr>
-        <tr data-id="cub-pillow"><td class="chk-col"><input type="checkbox" data-item="cub-pillow" data-weight="85" data-vol="0.4" data-ess=""></td><td class="item">Arrowhead Equipment Cub Pillow</td><td class="num">~85 g (3 oz)</td><td class="num">~0.3–0.5 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
-        <tr data-id="s2s-spork"><td class="chk-col"><input type="checkbox" data-item="s2s-spork" data-weight="11" data-vol="0.08" data-ess=""></td><td class="item">Sea to Summit Frontier long spork</td><td class="num">11 g (0.4 oz)</td><td class="num">~0.08 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
-        <tr data-id="wise-owl-stuffsack"><td class="chk-col"><input type="checkbox" data-item="wise-owl-stuffsack" data-weight="85" data-vol="0.1" data-ess=""></td><td class="item">Wise Owl 10L dry bag</td><td class="num">~85 g (3 oz)<span class="est">est.</span></td><td class="num">10 L cap.</td><td class="ess"><span class="none">&mdash;</span></td></tr>
-        <tr data-id="sunwill-mug"><td class="chk-col"><input type="checkbox" data-item="sunwill-mug" data-weight="280" data-vol="0.55" data-ess=""></td><td class="item">Sunwill travel mug</td><td class="num">280 g (9.9 oz)</td><td class="num">0.59 L cap.<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">EMS Creek Freak 32L backpack<span class="container-tag">container</span></td><td class="num">890 g (1.96 lb)</td><td class="num">32 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Backpack rain cover<span class="unused-tag">carried, not deployed</span></td><td class="num">80 g (2.8 oz)</td><td class="num">~0.15 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Black Diamond Cosmo 350 headlamp</td><td class="num">79 g (2.8 oz)</td><td class="num">~0.1 L</td><td class="ess"><span class="tag">Illumination</span></td></tr>
+        <tr><td class="item">Sea to Summit Frontier bowl (medium)</td><td class="num">62 g (2.2 oz)</td><td class="num">0.68 L cap.</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Nalgene 32 oz wide-mouth bottle</td><td class="num">177 g (6.25 oz)</td><td class="num">0.95 L cap.</td><td class="ess"><span class="tag">Hydration</span></td></tr>
+        <tr><td class="item">HydroJug, 64 oz</td><td class="num">~500 g (1.1 lb)<span class="est">est.</span></td><td class="num">~2.2 L<span class="est">est.</span>; 1.89 L cap.</td><td class="ess"><span class="tag">Hydration</span></td></tr>
+        <tr><td class="item">Arrowhead Equipment Cub Pillow</td><td class="num">~85 g (3 oz)</td><td class="num">~0.3–0.5 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Sea to Summit Frontier long spork</td><td class="num">11 g (0.4 oz)</td><td class="num">~0.08 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Wise Owl 10L dry bag</td><td class="num">~85 g (3 oz)<span class="est">est.</span></td><td class="num">10 L cap.</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Sunwill travel mug</td><td class="num">280 g (9.9 oz)</td><td class="num">0.59 L cap.</td><td class="ess"><span class="none">&mdash;</span></td></tr>
       </tbody>
     </table>
   </div>
-  <p class="footnote">The backpack itself is tracked as a container: its weight counts toward the total, but its 32 L capacity is the target the rest of your gear packs into — not more volume to add.</p>
+  <p class="footnote">The Sawyer Squeeze didn't arrive in time for this trip, so it isn't listed here — the Nalgene and HydroJug covered hydration.</p>
 
   <h2>Fire</h2>
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col"><input type="checkbox" class="group-toggle" title="Check/uncheck this whole group"></th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
+        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
-        <tr data-id="bic-lighter"><td class="chk-col"><input type="checkbox" data-item="bic-lighter" data-weight="20" data-vol="0.03" data-ess="Fire"></td><td class="item">Purple BIC lighter</td><td class="num">~20 g (0.7 oz)</td><td class="num">~0.03 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
-        <tr data-id="pocket-bellows"><td class="chk-col"><input type="checkbox" data-item="pocket-bellows" data-weight="50" data-vol="0.05" data-ess="Fire"></td><td class="item">Telescopic pocket bellows</td><td class="num">~50 g (1.8 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
-        <tr data-id="vaseline-cotton"><td class="chk-col"><input type="checkbox" data-item="vaseline-cotton" data-weight="32" data-vol="0.04" data-ess="Fire"></td><td class="item">Pill bottle, Vaseline-soaked cotton balls</td><td class="num">~30–35 g (1.1–1.2 oz)<span class="est">est.</span></td><td class="num">~0.04 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
-        <tr data-id="uberleben-hexa"><td class="chk-col"><input type="checkbox" data-item="uberleben-hexa" data-weight="119" data-vol="0.02" data-ess="Fire"></td><td class="item">Überleben Hexa ferro rod, 1/2"</td><td class="num">119 g (4.2 oz)</td><td class="num">~0.02 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
+        <tr><td class="item">Purple BIC lighter</td><td class="num">~20 g (0.7 oz)</td><td class="num">~0.03 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
+        <tr><td class="item">Telescopic pocket bellows</td><td class="num">~50 g (1.8 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
+        <tr><td class="item">Pill bottle, Vaseline-soaked cotton balls</td><td class="num">~30–35 g (1.1–1.2 oz)<span class="est">est.</span></td><td class="num">~0.04 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
+        <tr><td class="item">Überleben Hexa ferro rod, 1/2"</td><td class="num">119 g (4.2 oz)</td><td class="num">~0.02 L</td><td class="ess"><span class="tag">Fire</span></td></tr>
       </tbody>
     </table>
   </div>
+  <p class="footnote">Two fires were made — one lit in a single strike with a match provided by the instructor (not part of the carried kit), one with the ferro rod above.</p>
 
   <h2>Tools</h2>
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col"><input type="checkbox" class="group-toggle" title="Check/uncheck this whole group"></th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
+        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
-        <tr data-id="morakniv-companion"><td class="chk-col"><input type="checkbox" data-item="morakniv-companion" data-weight="160" data-vol="0.13" data-ess="Repair & Tools"></td><td class="item">Morakniv Companion, stainless, w/ sheath</td><td class="num">~160 g (5.6 oz)<span class="est">est.</span></td><td class="num">~0.13 L<span class="est">est.</span></td><td class="ess"><span class="tag">Repair &amp; Tools</span></td></tr>
-        <tr data-id="madison-trauma-shears"><td class="chk-col"><input type="checkbox" data-item="madison-trauma-shears" data-weight="150" data-vol="0.15" data-ess="Repair & Tools,First Aid"></td><td class="item">Madison Supply trauma shears (7.5")</td><td class="num">150 g (5.3 oz)</td><td class="num">~0.15 L</td><td class="ess"><span class="tag">Repair &amp; Tools</span><span class="tag">First Aid</span></td></tr>
-        <tr data-id="curved-hemostat"><td class="chk-col"><input type="checkbox" data-item="curved-hemostat" data-weight="57" data-vol="0.01" data-ess="Repair & Tools,First Aid"></td><td class="item">Curved hemostat, 6"</td><td class="num">57 g (2 oz)</td><td class="num">~0.01 L</td><td class="ess"><span class="tag">Repair &amp; Tools</span><span class="tag">First Aid</span></td></tr>
+        <tr><td class="item">Morakniv Companion, stainless, w/ sheath</td><td class="num">~160 g (5.6 oz)<span class="est">est.</span></td><td class="num">~0.13 L<span class="est">est.</span></td><td class="ess"><span class="tag">Repair &amp; Tools</span></td></tr>
+        <tr><td class="item">Madison Supply trauma shears (7.5")<span class="unused-tag">carried, unused</span></td><td class="num">150 g (5.3 oz)</td><td class="num">~0.15 L</td><td class="ess"><span class="tag">Repair &amp; Tools</span><span class="tag">First Aid</span></td></tr>
+        <tr><td class="item">Curved hemostat, 6"</td><td class="num">57 g (2 oz)</td><td class="num">~0.01 L</td><td class="ess"><span class="tag">Repair &amp; Tools</span><span class="tag">First Aid</span></td></tr>
       </tbody>
     </table>
   </div>
+  <p class="footnote">The hemostat's real use this trip was pulling a sausage out of the fire, not first aid.</p>
 
   <h2>Extras</h2>
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th class="chk-col"><input type="checkbox" class="group-toggle" title="Check/uncheck this whole group"></th><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
+        <tr><th>Item</th><th>Weight</th><th>Volume</th><th>Essential</th></tr>
       </thead>
       <tbody>
-        <tr data-id="whistle"><td class="chk-col"><input type="checkbox" data-item="whistle" data-weight="10" data-vol="0.01" data-ess=""></td><td class="item">Whistle</td><td class="num">~10 g (0.35 oz)<span class="est">est.</span></td><td class="num">negligible</td><td class="ess"><span class="none">&mdash;</span></td></tr>
-        <tr data-id="hand-warmers"><td class="chk-col"><input type="checkbox" data-item="hand-warmers" data-weight="110" data-vol="0.1" data-ess=""></td><td class="item">Hand warmers, 2 bags (2-pack each)</td><td class="num">~110 g (3.9 oz)<span class="est">est.</span></td><td class="num">~0.1 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
-        <tr data-id="bestglide-fishing-kit"><td class="chk-col"><input type="checkbox" data-item="bestglide-fishing-kit" data-weight="20" data-vol="0.05" data-ess=""></td><td class="item">Best Glide Compact Survival Fishing Kit</td><td class="num">~20 g (0.7 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
-        <tr data-id="off-deep-woods"><td class="chk-col"><input type="checkbox" data-item="off-deep-woods" data-weight="254" data-vol="0.5" data-ess=""></td><td class="item">OFF! Deep Woods 6 oz aerosol</td><td class="num">254 g (0.56 lb)</td><td class="num">~0.5 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
-        <tr data-id="wet-naps"><td class="chk-col"><input type="checkbox" data-item="wet-naps" data-weight="25" data-vol="0.02" data-ess=""></td><td class="item">Wet naps, 6 individual packets</td><td class="num">~25 g (0.9 oz)<span class="est">est.</span></td><td class="num">~0.02 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Whistle<span class="unused-tag">carried, unused</span></td><td class="num">~10 g (0.35 oz)<span class="est">est.</span></td><td class="num">negligible</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Hand warmers, 2 bags (2-pack each)<span class="unused-tag">carried, unused</span></td><td class="num">~110 g (3.9 oz)<span class="est">est.</span></td><td class="num">~0.1 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Best Glide Compact Survival Fishing Kit<span class="unused-tag">carried, unused</span></td><td class="num">~20 g (0.7 oz)<span class="est">est.</span></td><td class="num">~0.05 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">OFF! Deep Woods 6 oz aerosol</td><td class="num">254 g (0.56 lb)</td><td class="num">~0.5 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Wet naps, 6 individual packets</td><td class="num">~25 g (0.9 oz)<span class="est">est.</span></td><td class="num">~0.02 L</td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Toilet paper</td><td class="num">~50 g (1.8 oz)<span class="est">est.</span></td><td class="num">~0.15 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
+        <tr><td class="item">Excedrin</td><td class="num">~15 g (0.5 oz)<span class="est">est.</span></td><td class="num">~0.02 L<span class="est">est.</span></td><td class="ess"><span class="none">&mdash;</span></td></tr>
       </tbody>
     </table>
   </div>
+  <p class="footnote">Toilet paper and Excedrin were grabbed last-minute and weren't on the original packing list; weights/volumes here are generic estimates, not specific products.</p>
 
-  <h2>Trip Totals <span style="text-transform:none; letter-spacing:0; font-weight:400; color:var(--text-muted); font-size:0.7rem;">(full planned load, everything packed)</span></h2>
+  <h2>Trip Totals <span style="text-transform:none; letter-spacing:0; font-weight:400; color:var(--text-muted); font-size:0.7rem;">(actual gear carried)</span></h2>
   <div class="table-scroll">
     <table class="totals-table">
       <thead>
@@ -528,15 +552,15 @@
       <tbody>
         <tr>
           <td class="item">Total weight (all items, incl. backpack)</td>
-          <td class="num">~15.2 lb (6,872 g)</td>
+          <td class="num">~16.1 lb (7,291 g)</td>
           <td class="num">35 lb</td>
-          <td class="num diff-good">19.8 lb under <span class="tag">plenty of headroom</span></td>
+          <td class="num diff-good">18.9 lb under <span class="tag">plenty of headroom</span></td>
         </tr>
         <tr>
           <td class="item">Total volume (all items, excl. backpack)</td>
-          <td class="num">~25.7 L</td>
+          <td class="num">~27.6 L</td>
           <td class="num">32 L (backpack capacity)</td>
-          <td class="num diff-good">~6.3 L under <span class="tag">~80% full</span></td>
+          <td class="num diff-good">~4.4 L under <span class="tag">~86% full</span></td>
         </tr>
       </tbody>
     </table>
@@ -555,196 +579,51 @@
     </table>
   </div>
 
+  <h2>Trip Debrief</h2>
+  <div class="debrief">
+    <dl>
+      <dt>Weather</dt>
+      <dd>Forecast held: Saturday was cool and dry as predicted, rain moved in Sunday during the hike out.</dd>
+
+      <dt>Sleep &amp; warmth</dt>
+      <dd>Not warm enough overnight. Underquilt helped but wasn't sufficient on its own — ended up in a sweater, hiking pants, and eventually long underwear. A top quilt is a real need, not just a nice-to-have.</dd>
+
+      <dt>Bug net</dt>
+      <dd>Did its job but was genuinely annoying to deal with. An integrated bug net on the next hammock is now a non-negotiable.</dd>
+
+      <dt>Kootek hammock</dt>
+      <dd>Slept in it, wasn't bad, but diagonal lay technique didn't click — possibly a length issue with this model. Worth investigating before ruling the hammock itself out.</dd>
+
+      <dt>Hydration</dt>
+      <dd>Sawyer Squeeze didn't arrive in time for this trip. Nalgene + HydroJug covered hydration needs fine without it.</dd>
+
+      <dt>Backpack rain cover</dt>
+      <dd>Carried but not deployed — didn't look like it would fit over the bag once fully packed.</dd>
+
+      <dt>Fire</dt>
+      <dd>Two fires made: one lit in a single strike with a match the instructor provided (not part of the carried kit), one started with the ferro rod.</dd>
+
+      <dt>Hemostat</dt>
+      <dd>Used — but for pulling a sausage out of the fire, not first aid. Trauma shears rode along unused.</dd>
+
+      <dt>Bug spray</dt>
+      <dd>Definitely needed. The 6 oz OFF! Deep Woods volume was the right amount.</dd>
+
+      <dt>Unused but not dead weight</dt>
+      <dd>Whistle, hand warmers, and the fishing kit went unused this trip, but aren't considered worth cutting.</dd>
+
+      <dt>Not on the original list</dt>
+      <dd>Toilet paper and Excedrin were grabbed last-minute and carried, unlogged until now.</dd>
+
+      <dt>The backpack itself</dt>
+      <dd>Miserable to carry. A different pack is needed — this is the clearest actionable item from the trip.</dd>
+    </dl>
+  </div>
+
   <footer>
-    Weights and volumes are drawn from manufacturer/retailer specs where available; items marked <span class="est">est.</span> are estimates where no verified spec was found. The dashboard above sums only what's checked off — check items as you pack to watch it climb toward the 35 lb / 32 L targets. Checklist state is saved in this browser only (via localStorage) and won't sync across devices.
+    Weights and volumes are drawn from manufacturer/retailer specs where available; items marked <span class="est">est.</span> are estimates where no verified spec was found. This page reflects gear actually carried on the trip, not a pre-trip plan — items that didn't make it out the door (like the Sawyer Squeeze) aren't listed.
   </footer>
 
 </div>
-
-<script>
-(function () {
-  var STORAGE_KEY = 'packed-morgan-hill-2026-09-26';
-  var WEIGHT_TARGET_LB = 35;
-  var VOLUME_TARGET_L = 32;
-  var TEN_ESSENTIALS = [
-    'Navigation', 'Sun Protection', 'Insulation', 'Illumination', 'First Aid',
-    'Fire', 'Repair & Tools', 'Nutrition', 'Hydration', 'Shelter'
-  ];
-  var checkboxes = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"][data-item]'));
-
-  var groupToggles = Array.prototype.slice.call(document.querySelectorAll('.group-toggle'));
-
-  function checkboxesForTable(table) {
-    return checkboxes.filter(function (cb) { return table.contains(cb); });
-  }
-
-  function syncGroupToggles() {
-    groupToggles.forEach(function (toggle) {
-      var table = toggle.closest('table');
-      var members = checkboxesForTable(table);
-      var checkedCount = members.filter(function (cb) { return cb.checked; }).length;
-      if (checkedCount === 0) {
-        toggle.checked = false;
-        toggle.indeterminate = false;
-      } else if (checkedCount === members.length) {
-        toggle.checked = true;
-        toggle.indeterminate = false;
-      } else {
-        toggle.checked = false;
-        toggle.indeterminate = true;
-      }
-    });
-  }
-  var essGrid = document.getElementById('essentials-grid');
-  var essCountEl = document.getElementById('ess-count');
-  var essPills = {};
-
-  TEN_ESSENTIALS.forEach(function (name) {
-    var pill = document.createElement('span');
-    pill.className = 'ess-pill';
-    pill.innerHTML = '<span class="dot"></span>' + name;
-    essGrid.appendChild(pill);
-    essPills[name] = pill;
-  });
-
-  var itemsCountEl = document.getElementById('items-count');
-  var itemsTotalEl = document.getElementById('items-total');
-  var itemsFillEl = document.getElementById('items-fill');
-
-  var weightCountEl = document.getElementById('weight-count');
-  var weightFillEl = document.getElementById('weight-fill');
-  var weightNoteEl = document.getElementById('weight-note');
-
-  var volumeCountEl = document.getElementById('volume-count');
-  var volumeFillEl = document.getElementById('volume-fill');
-  var volumeNoteEl = document.getElementById('volume-note');
-
-  function loadState() {
-    try {
-      var raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : {};
-    } catch (e) {
-      return {};
-    }
-  }
-
-  function saveState(state) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (e) {
-      /* storage unavailable — checklist just won't persist */
-    }
-  }
-
-  function updateDashboard() {
-    var checked = checkboxes.filter(function (cb) { return cb.checked; });
-
-    var covered = {};
-    checked.forEach(function (cb) {
-      var essAttr = cb.getAttribute('data-ess') || '';
-      essAttr.split(',').forEach(function (name) {
-        name = name.trim();
-        if (name) covered[name] = true;
-      });
-    });
-    var coveredCount = 0;
-    TEN_ESSENTIALS.forEach(function (name) {
-      var isCovered = !!covered[name];
-      if (isCovered) coveredCount++;
-      essPills[name].classList.toggle('covered', isCovered);
-    });
-    essCountEl.textContent = coveredCount;
-
-    itemsCountEl.textContent = checked.length;
-    itemsTotalEl.textContent = checkboxes.length;
-    itemsFillEl.style.width = (checkboxes.length ? (checked.length / checkboxes.length * 100) : 0) + '%';
-
-    var weightG = checked.reduce(function (sum, cb) {
-      return sum + (parseFloat(cb.getAttribute('data-weight')) || 0);
-    }, 0);
-    var weightLb = weightG / 453.592;
-
-    var volumeL = checked.reduce(function (sum, cb) {
-      if (cb.getAttribute('data-container') === 'true') return sum;
-      return sum + (parseFloat(cb.getAttribute('data-vol')) || 0);
-    }, 0);
-
-    weightCountEl.textContent = weightLb.toFixed(1);
-    var weightPct = Math.min(100, (weightLb / WEIGHT_TARGET_LB) * 100);
-    weightFillEl.style.width = weightPct + '%';
-    weightFillEl.classList.toggle('over', weightLb > WEIGHT_TARGET_LB);
-    if (weightLb > WEIGHT_TARGET_LB) {
-      weightNoteEl.textContent = 'Over target by ' + (weightLb - WEIGHT_TARGET_LB).toFixed(1) + ' lb';
-      weightNoteEl.classList.add('over');
-    } else {
-      weightNoteEl.textContent = (WEIGHT_TARGET_LB - weightLb).toFixed(1) + ' lb remaining';
-      weightNoteEl.classList.remove('over');
-    }
-
-    volumeCountEl.textContent = volumeL.toFixed(1);
-    var volumePct = Math.min(100, (volumeL / VOLUME_TARGET_L) * 100);
-    volumeFillEl.style.width = volumePct + '%';
-    volumeFillEl.classList.toggle('over', volumeL > VOLUME_TARGET_L);
-    if (volumeL > VOLUME_TARGET_L) {
-      volumeNoteEl.textContent = 'Over backpack capacity by ' + (volumeL - VOLUME_TARGET_L).toFixed(1) + ' L';
-      volumeNoteEl.classList.add('over');
-    } else {
-      volumeNoteEl.textContent = (VOLUME_TARGET_L - volumeL).toFixed(1) + ' L of pack space left';
-      volumeNoteEl.classList.remove('over');
-    }
-
-    syncGroupToggles();
-  }
-
-  var state = loadState();
-
-  checkboxes.forEach(function (cb) {
-    var id = cb.getAttribute('data-item');
-    if (state[id]) {
-      cb.checked = true;
-      var row = document.querySelector('tr[data-id="' + id + '"]');
-      if (row) row.classList.add('packed');
-    }
-    cb.addEventListener('change', function () {
-      var row = document.querySelector('tr[data-id="' + id + '"]');
-      if (cb.checked) {
-        state[id] = true;
-        if (row) row.classList.add('packed');
-      } else {
-        delete state[id];
-        if (row) row.classList.remove('packed');
-      }
-      saveState(state);
-      updateDashboard();
-    });
-  });
-
-  groupToggles.forEach(function (toggle) {
-    toggle.addEventListener('change', function () {
-      var table = toggle.closest('table');
-      var members = checkboxesForTable(table);
-      var makeChecked = toggle.checked;
-      members.forEach(function (cb) {
-        if (cb.checked === makeChecked) return;
-        cb.checked = makeChecked;
-        var id = cb.getAttribute('data-item');
-        var row = document.querySelector('tr[data-id="' + id + '"]');
-        if (makeChecked) {
-          state[id] = true;
-          if (row) row.classList.add('packed');
-        } else {
-          delete state[id];
-          if (row) row.classList.remove('packed');
-        }
-      });
-      saveState(state);
-      updateDashboard();
-    });
-  });
-
-  updateDashboard();
-})();
-</script>
-
 </body>
 </html>
