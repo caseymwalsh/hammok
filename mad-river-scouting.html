@@ -427,6 +427,17 @@
   .debrief dt:first-child { margin-top: 0; }
   .debrief dd { margin: 0.2rem 0 0; color: var(--text-muted); font-style: italic; }
 
+  .map-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface);
+    margin-bottom: 1rem;
+  }
+  .map-card img { display: block; width: 100%; height: auto; max-width: 100%; }
+  .map-caption { padding: 0.55rem 0.75rem; font-size: 0.8rem; color: var(--text-muted); }
+  .map-caption a { color: var(--accent); }
+
   footer {
     margin-top: 3rem;
     padding-top: 1.25rem;
@@ -463,7 +474,17 @@
     <p><span class="label">Contacts</span>DEC Region 6 Herkimer office (315) 866-6330 &middot; Emergencies: 911 or 1-833-NYS-RANGERS &middot; <a href="https://dec.ny.gov/places/mad-river-state-forest">DEC page</a> &middot; <a href="https://dec.ny.gov/media/11686">GeoPDF map</a></p>
   </div>
 
-  <h2 style="margin-top:0;">After-Action Report</h2>
+  <h2 style="margin-top:0;">Maps</h2>
+  <div class="map-card">
+    <a href="images/mad-river/mapmadriver.pdf"><img src="images/mad-river/dec-map.jpg" alt="NYS DEC map of Mad River State Forest showing parking, gates, PFARs, and unmaintained town roads"></a>
+    <p class="map-caption">NYS DEC official map (12/20): parking, gates, Phalen and McSpirit PFARs, unmaintained town roads, 50 ft contours. <a href="images/mad-river/mapmadriver.pdf">Open the PDF</a></p>
+  </div>
+  <div class="map-card">
+    <a href="images/mad-river/topo-map.jpg"><img src="images/mad-river/topo-map.jpg" alt="Shaded-relief topo map of Mad River State Forest with lat/long grid"></a>
+    <p class="map-caption">Shaded-relief topo with lat/long grid, by Andy Arthur (4/30/2026), data from NYS GIS and NYS DEC. Handy for reading terrain and pinning candidate site coordinates.</p>
+  </div>
+
+  <h2>After-Action Report</h2>
 
   <h3 style="font-size:0.9rem; margin:0 0 0.6rem;">Campsite Log</h3>
   <div class="table-scroll">
