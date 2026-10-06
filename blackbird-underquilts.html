@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blackbird Underquilts</title>
+<style>
+  /* Layout: one reading column for picks + notes, then a full-width filterable table that scrolls sideways on its own. Matches the gear inventory's sage-and-canvas palette. */
+  :root {
+    --bg: #faf8f4;
+    --surface: #ffffff;
+    --border: #e3ddd0;
+    --text: #2b2620;
+    --text-muted: #746b5c;
+    --accent: #5f7a52;
+    --accent-soft: #eef2e9;
+    --warn: #a05a2c;
+    --warn-soft: #fbf0e6;
+    --good: #3f7a4a;
+    --good-soft: #e5f1e6;
+    --mid: #8a6d1f;
+    --mid-soft: #f6efd9;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1c1a17; --surface: #26231e; --border: #3a352c; --text: #ece7dc; --text-muted: #a89e8c;
+      --accent: #8fae7c; --accent-soft: #2c3527; --warn: #d99a63; --warn-soft: #3a2c1f;
+      --good: #8cc595; --good-soft: #233428; --mid: #d6b75e; --mid-soft: #382f17;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1c1a17; --surface: #26231e; --border: #3a352c; --text: #ece7dc; --text-muted: #a89e8c;
+    --accent: #8fae7c; --accent-soft: #2c3527; --warn: #d99a63; --warn-soft: #3a2c1f;
+    --good: #8cc595; --good-soft: #233428; --mid: #d6b75e; --mid-soft: #382f17;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-inline: 1.25rem; padding-block: 2.5rem 4rem; }
+  .col { max-width: 760px; }
+  .breadcrumb { font-size: 0.85rem; margin: 0 0 1.25rem; }
+  a { color: var(--accent); }
+  .breadcrumb a { text-decoration: none; }
+  h1 { font-size: 1.6rem; margin: 0 0 0.35rem; letter-spacing: -0.01em; text-wrap: balance; }
+  .subtitle { color: var(--text-muted); font-size: 0.95rem; margin: 0; }
+  h2 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin: 2.5rem 0 1rem; }
+  p { margin: 0 0 0.8rem; }
+  .facts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.1rem 0 0; padding: 0; list-style: none; }
+  .facts li { font-size: 0.82rem; background: var(--accent-soft); border-radius: 999px; padding: 0.2rem 0.7rem; }
+  .picks { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.8rem; }
+  .pick { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem 1.05rem; min-width: 0; }
+  .pick .role { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600; }
+  .pick .name { font-weight: 650; margin: 0.15rem 0 0.1rem; }
+  .pick .stats { font-size: 0.82rem; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-bottom: 0.45rem; }
+  .pick p { font-size: 0.88rem; margin: 0; }
+  ul.notes { padding-left: 1.1rem; margin: 0; }
+  ul.notes li { margin-bottom: 0.45rem; }
+  .controls { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; margin-bottom: 0.8rem; }
+  .controls input[type=search], .controls select { font: inherit; font-size: 0.9rem; padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--text); }
+  .controls input[type=search] { flex: 1 1 220px; min-width: 0; }
+  .controls label { font-size: 0.82rem; color: var(--text-muted); display: flex; gap: 0.4rem; align-items: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .chip { font: inherit; font-size: 0.8rem; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 0.2rem 0.65rem; cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .chip:focus-visible, th button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .count { font-size: 0.82rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .table-scroll { width: 100%; overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 1150px; }
+  th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th { background: var(--accent-soft); position: sticky; top: 0; }
+  th button { all: unset; cursor: pointer; font-weight: 600; color: var(--text-muted); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; }
+  th button::after { content: " ↕"; opacity: 0.35; }
+  th[aria-sort="ascending"] button::after { content: " ↑"; opacity: 1; }
+  th[aria-sort="descending"] button::after { content: " ↓"; opacity: 1; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--accent-soft); }
+  td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td.model { font-weight: 600; min-width: 170px; }
+  td.model small { display: block; font-weight: 400; color: var(--text-muted); }
+  td.note { min-width: 240px; color: var(--text); }
+  .est { display: inline-block; font-size: 0.68rem; font-weight: 600; color: var(--warn); background: var(--warn-soft); border-radius: 5px; padding: 0 0.35rem; margin-left: 0.3rem; vertical-align: middle; }
+  .fit { display: inline-block; font-size: 0.74rem; font-weight: 600; border-radius: 5px; padding: 0.05rem 0.45rem; white-space: nowrap; }
+  .fit.built { color: var(--good); background: var(--good-soft); }
+  .fit.works { color: var(--accent); background: var(--accent-soft); }
+  .fit.fiddly { color: var(--mid); background: var(--mid-soft); }
+  .fit.poor { color: var(--warn); background: var(--warn-soft); }
+  .sub { color: var(--text-muted); font-size: 0.78rem; display: block; }
+  .footnote { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.6rem; }
+  footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.8rem; }
+  @media (max-width: 520px) { h1 { font-size: 1.35rem; } .wrap { padding-inline: 1rem; padding-block: 1.75rem 3rem; } }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <p class="breadcrumb"><a href="index.html">Trips</a> &middot; <a href="inventory.html">Gear Inventory</a> &middot; Blackbird Underquilts</p>
+
+  <div class="col">
+    <h1>Underquilts for the Warbonnet Blackbird</h1>
+    <p class="subtitle">50 configurations from 14 product lines, compared for an Original Blackbird (10 ft) and the shoulder seasons in upstate New York.</p>
+    <ul class="facts">
+      <li>Sleeper: 5′7″, ~230 lb</li>
+      <li>Hammock: Original Blackbird, lies head-left</li>
+      <li>Current: borrowed Wise Owl, 40°F, 29.3 oz</li>
+      <li>Target: 20°F for April–May and Sept–Oct</li>
+    </ul>
+  </div>
+
+  <h2>Short answer</h2>
+  <div class="picks">
+    <div class="pick">
+      <div class="role">Best fit</div>
+      <div class="name">Warbonnet Wooki 20°F (10 ft)</div>
+      <div class="stats">20.9 oz · ~6 L · ~$270</div>
+      <p>Cut for the Blackbird's footbox and head-left lay, so it sets once and stays put. Watch the width: it's 39″ at the shoulders, and broad sleepers sometimes want more.</p>
+    </div>
+    <div class="pick">
+      <div class="role">Best all-rounder</div>
+      <div class="name">Hammock Gear Incubator 20°F, standard</div>
+      <div class="stats">~22 oz · 8.5 L · $279.95</div>
+      <p>44″ wide and 78″ long gives a bigger frame room on the diagonal. Draft collars, 850 fill, 4.9 stars across 500+ reviews. Takes a little more adjusting on a Blackbird than a Wooki.</p>
+    </div>
+    <div class="pick">
+      <div class="role">Lighter, cheaper</div>
+      <div class="name">Hammock Gear Phoenix 20°F</div>
+      <div class="stats">15.5 oz · 8.5 L · $219.95</div>
+      <p>Three-quarter length, ending at the knees. You need a sit pad under your calves, which you're already planning to buy. Saves about 6 oz and $60 over the Incubator.</p>
+    </div>
+    <div class="pick">
+      <div class="role">Budget, wet weather</div>
+      <div class="name">Arrowhead Jarbidge River 25°F</div>
+      <div class="stats">20 oz · ~10 L · from $115</div>
+      <p>Synthetic Climashield APEX keeps insulating when damp. Bulkier than down, and also ¾ length. Arrowhead shows it on a Blackbird in its own photos.</p>
+    </div>
+  </div>
+
+  <h2>Compare all 50</h2>
+  <div class="controls">
+    <input type="search" id="q" placeholder="Search brand, model, fill, notes…" aria-label="Search quilts">
+    <div class="chips" role="group" aria-label="Coverage">
+      <button class="chip" data-cov="Full" aria-pressed="false">Full</button>
+      <button class="chip" data-cov="¾" aria-pressed="false">¾</button>
+      <button class="chip" data-cov="Torso" aria-pressed="false">Torso</button>
+      <button class="chip" data-cov="Multi-use" aria-pressed="false">Multi-use</button>
+    </div>
+    <label for="fill">Fill
+      <select id="fill"><option value="">Any</option><option>Down</option><option>Synthetic</option></select>
+    </label>
+    <label for="temp">Rated to
+      <select id="temp"><option value="">Any</option><option value="40">40°F or colder</option><option value="20">20°F or colder</option><option value="0">0°F or colder</option></select>
+    </label>
+    <label for="fitsel">Blackbird fit
+      <select id="fitsel"><option value="">Any</option><option value="built">Built for it</option><option value="works">Works well</option><option value="fiddly">Workable</option><option value="poor">Poor match</option></select>
+    </label>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="table-scroll">
+    <table id="t">
+      <thead><tr>
+        <th data-k="name"><button>Quilt</button></th>
+        <th data-k="temp"><button>Rating</button></th>
+        <th data-k="cov"><button>Coverage</button></th>
+        <th data-k="w"><button>Weight</button></th>
+        <th data-k="vol"><button>Packed</button></th>
+        <th data-k="fill"><button>Fill</button></th>
+        <th data-k="fw"><button>Fill wt</button></th>
+        <th data-k="size"><button>Size</button></th>
+        <th data-k="price"><button>Price</button></th>
+        <th data-k="fit"><button>Blackbird fit</button></th>
+        <th data-k="note"><button>Notes</button></th>
+      </tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+  <p class="footnote">Weights are total quilt weight in the stated config (10D shell where there's a choice). <span class="est">est.</span> marks figures I estimated from a neighboring size, temperature, or the stuff sack's dimensions, because the maker doesn't publish them. Prices are list prices for that config, before shipping and options like overfill or color. Packed volume is compressed in the maker's stuff sack; most down quilts ride bigger and loftier in a dry bag.</p>
+
+  <div class="col">
+    <h2>What matters on a Blackbird</h2>
+    <ul class="notes">
+      <li><strong>Shape.</strong> The Blackbird is asymmetric with a footbox, and you lie head-left. Warbonnet's Wooki and Yeti are cut for that lay. Other contoured quilts (Incubator, Zeppelin, Mt Washington) work fine, but you'll spend a few minutes sliding the quilt toward your head end and snugging the suspension the first couple of nights.</li>
+      <li><strong>Length.</strong> Get the 10 ft Wooki for the Original Blackbird; the 11 ft one is sized for the XLC. For HG, standard length (78″) suits 5′7″ on a diagonal better than short (73″), even though short is rated up to 5′7″.</li>
+      <li><strong>Width.</strong> At ~230 lb you'll sit deeper in the hammock and press more of your shoulders against the sides. The 44″ Incubator and Zeppelin, the 42″ JRB quilts, and the 46″ Zeppelin Wide close drafts at the shoulders better than the 39″ Wooki.</li>
+      <li><strong>¾ and torso quilts.</strong> Phoenix, Greylock, Jarbidge and Yeti save 3–8 oz but need a pad under your legs. A torso quilt plus sit pad usually weighs about the same as a full quilt, so the main gain is pack space.</li>
+      <li><strong>Multi-use quilts</strong> (Hudson River, Old Rag, Firebelly) double as top quilts. They're flat rectangles, so on a Blackbird they gap more than a contoured underquilt. Good if you want one quilt for hammock and ground.</li>
+      <li><strong>What to skip.</strong> ENO and Onewind quilts are built for wide gathered-end hammocks like the DoubleNest, run 24–40 oz, and pack to 9–12 L. That's no step up from the Wise Owl you're borrowing.</li>
+      <li><strong>Lead times.</strong> Warbonnet ships in about 1–2 weeks; Hammock Gear quotes about 20 business days on custom builds. Check HG's in-stock page for faster options.</li>
+    </ul>
+  </div>
+
+  <footer>Specs gathered October 2026 from maker pages and spec sheets (Warbonnet, Hammock Gear, UGQ, Jacks R Better, Arrowhead, ENO, Kammok, Onewind, Outdoor Vitals) and reviews from SectionHiker, The Ultimate Hang and Greenbelly. Prices and options change often, so confirm on the maker's page before ordering.</footer>
+</div>
+
+<script>
+const WB = "https://www.warbonnetoutdoors.com/product/";
+const HG = "https://hammockgear.com/product/";
+const JRB = "https://jacksrbetter.com/products/";
+const UGQ = "https://ugqoutdoor.com/product/zeppelin-under-quilt-2023/";
+const ARR = "https://www.arrowhead-equipment.com/store/p312/JarbidgeUnderquilt.html";
+const OV = "https://outdoorvitals.com/collections/sleep-systems";
+const ENO = "https://eaglesnestoutfittersinc.com/products/";
+const ONE = "https://www.amazon.com/onewind-Underquilt-Lightweight-Insulation-Backpacking/dp/B0DM4WF475";
+// brand, model, temp, cov, weight oz, wEst, packed L, vEst, fill (Down/Synthetic), fillDetail, fill oz, fwEst, size, price, priceText, pEst, fit, note, url
+const D = [
+  ["Warbonnet","Wooki 40°F (10 ft)",40,"Full",16,1,4.5,1,"Down","850 goose, Expi-Dry",6,1,"~44 × 76″",230,"~$230",1,"built","Lightest Wooki. Set-and-forget on the Blackbird; HVAC vent loops let you dump heat.",WB+"wooki-underquilts/"],
+  ["Warbonnet","Wooki 20°F (10 ft)",20,"Full",20.85,0,6,1,"Down","850 goose, Expi-Dry",10,0,"39″ shoulders → 30″ feet, 75″ long",270,"~$270",1,"built","Made for this hammock. Insulated area narrows to 30″ at the feet; one broad-shouldered reviewer wanted more width.",WB+"wooki-underquilts/"],
+  ["Warbonnet","Wooki 0°F (10 ft)",0,"Full",24.3,0,8,1,"Down","850 goose, Expi-Dry",13,0,"~44 × 76″",320,"~$320",1,"built","Winter weight. Overkill for 3-season NY unless you camp in December–March.",WB+"wooki-underquilts/"],
+  ["Warbonnet","Yeti 40°F",40,"Torso",9,0,1.5,1,"Down","850 goose, Expi-Dry",null,0,"40 × 46″",175,"$175",0,"built","Shoulders to knees. Needs a leg pad. Stuffs to about Nalgene size.",WB+"yeti-underquilts/"],
+  ["Warbonnet","Yeti 20°F",20,"Torso",12.9,0,2.5,1,"Down","850 goose, Expi-Dry",null,0,"40 × 46″",195,"~$195",1,"built","Reviewers measured 12.5–13.2 oz. Saves 7–8 oz over a full Wooki once you count a sit pad.",WB+"yeti-underquilts/"],
+  ["Warbonnet","Yeti 0°F",0,"Torso",16,1,3.5,1,"Down","850 goose, Expi-Dry",null,0,"40 × 46″",215,"~$215",1,"built","Winter torso option; leg pad has to be warm too.",WB+"yeti-underquilts/"],
+  ["Hammock Gear","Incubator 40°F, standard",40,"Full",16.3,1,4.5,0,"Down","850 FP",7.5,1,"78 × 44″",239.95,"$239.95",0,"works","Contoured with draft collars and asymmetric secondary suspension. 527 reviews, 4.94★.",HG+"incubator/"],
+  ["Hammock Gear","Incubator 30°F, standard",30,"Full",18.7,1,5.5,1,"Down","850 FP",9.5,1,"78 × 44″",259.95,"$259.95",0,"works","Good September–October rating.",HG+"incubator/"],
+  ["Hammock Gear","Incubator 20°F, standard",20,"Full",21.8,1,8.5,0,"Down","850 FP",12.5,1,"78 × 44″",279.95,"$279.95",0,"works","Strong 3-season pick for upstate NY. Wider than the Wooki.",HG+"incubator/"],
+  ["Hammock Gear","Incubator 0°F, standard",0,"Full",27.2,1,8.5,0,"Down","850 FP",17.5,1,"78 × 44″",299.95,"$299.95",0,"works","Winter. Only $20 more than the 20°F.",HG+"incubator/"],
+  ["Hammock Gear","Premium Incubator 20°F (950 FP)",20,"Full",19.94,0,7.5,1,"Down","950 FP goose",11.02,0,"78 × 44″",null,"ask HG",0,"works","Premium down saves ~2 oz over 850. Price varies by build.","https://hammockgear.com/wp-content/uploads/2025/06/PIncubator.pdf"],
+  ["Hammock Gear","Premium Incubator 40°F (950 FP)",40,"Full",14.96,0,4,1,"Down","950 FP goose",6.52,0,"78 × 44″",null,"ask HG",0,"works","Lightest full-length quilt here.","https://hammockgear.com/wp-content/uploads/2025/06/PIncubator.pdf"],
+  ["Hammock Gear","Phoenix 40°F",40,"¾",11.86,0,4.5,0,"Down","850 FP, 10D",null,0,"¾ length, to knees",199.95,"$199.95",0,"works","Needs a leg pad. 366 reviews, 4.94★.",HG+"phoenix/"],
+  ["Hammock Gear","Phoenix 30°F",30,"¾",13.68,0,5.5,0,"Down","850 FP, 10D",null,0,"¾ length, to knees",209.95,"$209.95",0,"works","",HG+"phoenix/"],
+  ["Hammock Gear","Phoenix 20°F",20,"¾",15.48,0,8.5,0,"Down","850 FP, 10D",null,0,"¾ length, to knees",219.95,"$219.95",0,"works","Best value 20°F down quilt here if you add a sit pad.",HG+"phoenix/"],
+  ["Hammock Gear","Phoenix 0°F",0,"¾",20.79,0,8.5,0,"Down","850 FP, 10D",null,0,"¾ length, to knees",239.95,"$239.95",0,"works","",HG+"phoenix/"],
+  ["Hammock Gear","Phoenix 40°F (7D, 950 FP)",40,"¾",9.44,0,4,1,"Down","950 FP, 7D shell",null,0,"¾ length, to knees",null,"ask HG",0,"works","Ultralight build. 7D fabric is more delicate.","https://hammockgear.com/wp-content/uploads/2025/06/PPhoenix.pdf"],
+  ["Hammock Gear","Hearth 50°F, short",50,"Full",11.4,0,4.5,1,"Down","850 FP",null,0,"40″ wide rectangle",119.95,"from $119.95",0,"fiddly","No taper or contour, so more gapping. Cheapest down full-length here.",HG+"hearth/"],
+  ["Hammock Gear","Hearth 30°F, long",30,"Full",21.08,0,7,1,"Down","850 FP",null,0,"40″ wide rectangle",139.95,"~$140",1,"fiddly","Budget down. 40″ is narrow for broad shoulders.",HG+"hearth/"],
+  ["UGQ","Zeppelin 50°F (ready to ship)",50,"Full",15,1,4.5,1,"Down","800 FP",null,0,"77 × 44″",264.95,"$264.95",0,"works","Summer only. Ships now instead of custom lead time.","https://ugqoutdoor.com/product-category/ready-to-ship/zeppelin/"],
+  ["UGQ","Zeppelin 20°F (800 FP)",20,"Full",22.5,0,7,1,"Down","800 FP",14,0,"77 × 44″",274.95,"from $274.95",0,"works","Hardware included. Option for 7/8 length (66″).",UGQ],
+  ["UGQ","Zeppelin 20°F (950 FP)",20,"Full",22.1,0,6.5,1,"Down","950 FP",null,0,"77 × 44″",284.95,"$284.95",0,"works","Reviewed by SectionHiker; well-built and adjustable.",UGQ],
+  ["UGQ","Wide Zeppelin 20°F",20,"Full",24,1,7.5,1,"Down","800 FP",15,1,"77 × ~50″",299.95,"from $299.95",0,"works","Widest contoured option. Worth it if shoulders gap on a 44″ quilt.","https://ugqoutdoor.com/product/wide-zeppelin-under-quilt-2023/"],
+  ["UGQ","Limited Zeppelin 20°F",20,"Full",21,1,6.5,1,"Down","Premium down, limited build",null,0,"77 × 44″",366.95,"$366.95",0,"works","Small-batch spec; price premium for fabric/fill upgrades.",UGQ],
+  ["UGQ","Limited Zeppelin 0°F",0,"Full",27,1,8.5,1,"Down","Premium down, limited build",null,0,"77 × 44″",391.95,"$391.95",0,"works","",UGQ],
+  ["Jacks R Better","Greylock 3, 20°F",20,"¾",17,0,6,1,"Down","850 FP",null,0,"~56 × 42″, 2.5″ loft",269.95,"$269.95",0,"works","¾ length; leg pad needed. Long-running design.",JRB+"greylock-3-20-degree-three-quarter-hammock-underquilt"],
+  ["Jacks R Better","Greylock 4, 0°F",0,"¾",22,0,8,1,"Down","850 FP",null,0,"56 × 42″, 3.5″ loft",309.95,"$309.95",0,"works","",JRB+"greylock-4-0-degree-three-quarter-hammock-underquilt"],
+  ["Jacks R Better","Mt Washington 3, 20°F",20,"Full",19.5,0,7,1,"Down","850 FP",null,0,"Full × 42″",289.95,"$289.95",0,"works","Full-length JRB. Light for a 20°F full quilt.",JRB+"mt-washington-3-20-degree-three-season-hammock-underquilt"],
+  ["Jacks R Better","Mt Washington 4, 0°F",0,"Full",24.59,0,9,1,"Down","850 FP",null,0,"Full × 42″",359.95,"$359.95",0,"works","",JRB+"mt-washington-4-0-degree-winter-hammock-underquilt"],
+  ["Jacks R Better","Shenandoah, 40°F",40,"Multi-use",14.5,0,5,1,"Down","850 FP",null,0,"Rectangle",189.95,"$189.95",0,"fiddly","Underquilt or top quilt. Summer warmth.",JRB+"shenandoah-40-degree-multifunction-summer-camping-quilt"],
+  ["Jacks R Better","Shenandoah UL, 40°F",40,"Multi-use",11.5,0,4,1,"Down","850 FP, UL shell",null,0,"Rectangle",329,"$329",0,"fiddly","3 oz lighter for $140 more.",JRB+"shenandoah-ultralight-40-degree-multifunction-summer-backpacking-quilt"],
+  ["Jacks R Better","Hudson River, 20°F",20,"Multi-use",21.5,0,8,1,"Down","850 FP",null,0,"Rectangle, 48″ wide",279.95,"$279.95",0,"fiddly","Wide multi-use. Could serve as your top quilt on the ground later.",JRB+"hudson-river-quilt-20f-3-season-hammock-quilt"],
+  ["Jacks R Better","Hudson River UL, 20°F",20,"Multi-use",16.2,0,6,1,"Down","850 FP, UL shell",null,0,"Rectangle",459,"$459",0,"fiddly","",JRB+"hudson-river-ultralight-20-degree-multifunction-three-season-backpacking-quilt"],
+  ["Jacks R Better","Old Rag Mountain, 0°F",0,"Multi-use",27,0,10,1,"Down","850 FP",null,0,"Rectangle",339.95,"$339.95",0,"fiddly","",JRB+"old-rag-mountain-quilt-0f-winter-hammock-quilt"],
+  ["Jacks R Better","Old Rag Mountain UL, 0°F",0,"Multi-use",22.2,0,8,1,"Down","850 FP, UL shell",null,0,"Rectangle",599,"$599",0,"fiddly","Most expensive here.",JRB+"old-rag-mountain-ultralight-0-degree-multifunction-winter-backpacking-quilt"],
+  ["Arrowhead","Jarbidge River 45°F",45,"¾",16,0,8,1,"Synthetic","Climashield APEX",null,0,"58 × 42″",115,"from $115",0,"works","Synthetic handles damp better. Arrowhead pictures it on a Blackbird.",ARR],
+  ["Arrowhead","Jarbidge River 25°F",25,"¾",20,0,10,1,"Synthetic","Climashield APEX",null,0,"58 × 42″",140,"~$140",1,"works","Budget 3-season option; bulkier than down.",ARR],
+  ["Arrowhead","Jarbidge River 0°F",0,"¾",28,0,14,1,"Synthetic","Climashield APEX",null,0,"58 × 42″",180,"~$180",1,"works","",ARR],
+  ["Outdoor Vitals","StormLoft UQ 30°F, regular",30,"Full",20,0,6,1,"Down","800+ FP, 10D",10,0,"76 × 44″",224.97,"from $224.97",0,"works","Check availability; OV stock comes and goes.",OV],
+  ["Outdoor Vitals","StormLoft UQ 15°F, regular",15,"Full",23.5,0,7,1,"Down","800+ FP, 10D",14,0,"76 × 44″",259.97,"~$260",1,"works","",OV],
+  ["Outdoor Vitals","StormLoft UQ 0°F, regular",0,"Full",28.5,0,5.7,0,"Down","800+ FP, 10D",17.6,0,"76 × 44″",289.97,"~$290",1,"works","Compresses to 9 × 7″.",OV],
+  ["Western Mountaineering","Slinglite 20°F",20,"Full",14,1,5,1,"Down","850 FP goose",null,0,"Contoured",305,"$305",0,"works","Light and very well made; limited availability.","https://www.westernmountaineering.com/"],
+  ["Enlightened Equipment","Revolt 40°F",40,"Full",10.6,0,4,1,"Down","850 FP",null,0,"Contoured",265,"from $265",0,"works","Light; EE's hammock line ranges 10.6–21.7 oz across temps.","https://enlightenedequipment.com/"],
+  ["Kammok","Firebelly 30°F",30,"Multi-use",28.2,0,9.2,0,"Down","750 duck",null,0,"88 × 55″",309.95,"$309.95",0,"fiddly","Blanket/top/underquilt. 34.5 oz with all hardware. Big and heavy for this job.","https://kammok.com/products/firebelly-30-backpacking-quilt"],
+  ["ENO","Ember UQ",40,"Full",27,0,9.6,0,"Synthetic","160 g recycled poly",null,0,"82 × 48″",119.95,"$119.95",0,"poor","Rated 40–60°F. Made for gathered-end ENO hammocks.",ENO+"ember-underquilt"],
+  ["ENO","Vulcan UQ",30,"Full",27,1,10,1,"Synthetic","PrimaLoft",null,0,"~80 × 48″",179.95,"$179.95",0,"poor","Rated 30–50°F. Heavy and bulky for its warmth.","https://hammocksforcamping.com/eno-vulcan-underquilt/"],
+  ["ENO","Blaze UQ",30,"Full",24,0,9.6,0,"Down","DownTek water-resistant",null,0,"78 × 48″",299.95,"$299.95",0,"poor","Rated 30–40°F. Pricey for the weight.","https://hammockliving.co/gear-review-eno-blaze-hammock-underquilt/"],
+  ["Onewind","Solstice down UQ",32,"Full",30,0,8,1,"Down","800 duck",null,0,"~82 × 52″",219,"$219",0,"poor","Rated 32–56°F. Heavy for a down quilt.","https://www.amazon.com/s?k=onewind+underquilt"],
+  ["Onewind","Equinox down UQ",0,"Full",40.5,0,12,1,"Down","800 duck",null,0,"~82 × 52″",279,"$279",0,"poor","Rated 0–20°F. Heaviest quilt here.","https://www.amazon.com/s?k=onewind+underquilt"],
+  ["Onewind","Synthetic UQ",40,"Full",35,0,11,1,"Synthetic","Polyester",null,0,"82 × 52″",69.99,"$69.99",0,"poor","Rated ~40–60°F. Cheapest here, but no lighter than the Wise Owl.",ONE],
+];
+const FIT = {built:["Built for it",0],works:["Works well",1],fiddly:["Workable",2],poor:["Poor match",3]};
+const rows = D.map(r => ({brand:r[0],model:r[1],name:r[0]+" "+r[1],temp:r[2],cov:r[3],w:r[4],wEst:r[5],vol:r[6],vEst:r[7],fill:r[8],fillD:r[9],fw:r[10],fwEst:r[11],size:r[12],price:r[13],priceT:r[14],pEst:r[15],fit:r[16],note:r[17],url:r[18]}));
+const est = b => b ? '<span class="est">est.</span>' : '';
+const g = oz => Math.round(oz*28.35).toLocaleString();
+let sortK = null, sortDir = 1;
+const state = {q:"",cov:new Set(),fill:"",temp:"",fit:""};
+function render(){
+  let list = rows.filter(r => {
+    if (state.q) { const s=(r.name+" "+r.fillD+" "+r.note+" "+r.fill+" "+r.cov+" "+r.size).toLowerCase(); if(!state.q.split(/\s+/).every(t=>s.includes(t))) return false; }
+    if (state.cov.size && !state.cov.has(r.cov)) return false;
+    if (state.fill && r.fill!==state.fill) return false;
+    if (state.temp!=="" && r.temp>+state.temp) return false;
+    if (state.fit && r.fit!==state.fit) return false;
+    return true;
+  });
+  if (sortK){
+    list.sort((a,b)=>{
+      let x=a[sortK], y=b[sortK];
+      if (sortK==="fit"){x=FIT[x][1];y=FIT[y][1];}
+      if (x==null) return 1; if (y==null) return -1;
+      return (typeof x==="string"? x.localeCompare(y): x-y)*sortDir;
+    });
+  }
+  document.getElementById("tb").innerHTML = list.map(r=>`<tr>
+    <td class="model"><a href="${r.url}" target="_blank" rel="noopener">${r.model}</a><small>${r.brand}</small></td>
+    <td class="num">${r.temp}°F</td>
+    <td>${r.cov}</td>
+    <td class="num">${r.w} oz${est(r.wEst)}<span class="sub">${g(r.w)} g</span></td>
+    <td class="num">${r.vol} L${est(r.vEst)}</td>
+    <td>${r.fill}<span class="sub">${r.fillD}</span></td>
+    <td class="num">${r.fw==null?'<span class="sub">n/a</span>':r.fw+' oz'+est(r.fwEst)}</td>
+    <td>${r.size}</td>
+    <td class="num">${r.priceT}${est(r.pEst)}</td>
+    <td><span class="fit ${r.fit}">${FIT[r.fit][0]}</span></td>
+    <td class="note">${r.note||''}</td></tr>`).join("");
+  document.getElementById("count").textContent = `${list.length} of ${rows.length} shown`;
+}
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value.trim().toLowerCase();render();});
+document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{const v=b.dataset.cov;const on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",on);on?state.cov.add(v):state.cov.delete(v);render();}));
+document.getElementById("fill").addEventListener("change",e=>{state.fill=e.target.value;render();});
+document.getElementById("temp").addEventListener("change",e=>{state.temp=e.target.value;render();});
+document.getElementById("fitsel").addEventListener("change",e=>{state.fit=e.target.value;render();});
+document.querySelectorAll("th").forEach(th=>th.querySelector("button").addEventListener("click",()=>{
+  const k=th.dataset.k; if(sortK===k) sortDir=-sortDir; else {sortK=k;sortDir=1;}
+  document.querySelectorAll("th").forEach(h=>h.removeAttribute("aria-sort"));
+  th.setAttribute("aria-sort",sortDir===1?"ascending":"descending"); render();
+}));
+render();
+</script>
+
+</body>
+</html>
