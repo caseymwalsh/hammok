@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hammock Comparison</title>
+<style>
+  /* Layout: one reading column for picks + notes, then a full-width filterable table that scrolls sideways on its own. Same look as the underquilt page and gear inventory's sage-and-canvas palette. */
+  :root {
+    --bg: #faf8f4;
+    --surface: #ffffff;
+    --border: #e3ddd0;
+    --text: #2b2620;
+    --text-muted: #746b5c;
+    --accent: #5f7a52;
+    --accent-soft: #eef2e9;
+    --warn: #a05a2c;
+    --warn-soft: #fbf0e6;
+    --good: #3f7a4a;
+    --good-soft: #e5f1e6;
+    --mid: #8a6d1f;
+    --mid-soft: #f6efd9;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1c1a17; --surface: #26231e; --border: #3a352c; --text: #ece7dc; --text-muted: #a89e8c;
+      --accent: #8fae7c; --accent-soft: #2c3527; --warn: #d99a63; --warn-soft: #3a2c1f;
+      --good: #8cc595; --good-soft: #233428; --mid: #d6b75e; --mid-soft: #382f17;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1c1a17; --surface: #26231e; --border: #3a352c; --text: #ece7dc; --text-muted: #a89e8c;
+    --accent: #8fae7c; --accent-soft: #2c3527; --warn: #d99a63; --warn-soft: #3a2c1f;
+    --good: #8cc595; --good-soft: #233428; --mid: #d6b75e; --mid-soft: #382f17;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-inline: 1.25rem; padding-block: 2.5rem 4rem; }
+  .col { max-width: 760px; }
+  .breadcrumb { font-size: 0.85rem; margin: 0 0 1.25rem; }
+  a { color: var(--accent); }
+  .breadcrumb a { text-decoration: none; }
+  h1 { font-size: 1.6rem; margin: 0 0 0.35rem; letter-spacing: -0.01em; text-wrap: balance; }
+  .subtitle { color: var(--text-muted); font-size: 0.95rem; margin: 0; }
+  h2 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin: 2.5rem 0 1rem; }
+  p { margin: 0 0 0.8rem; }
+  .facts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.1rem 0 0; padding: 0; list-style: none; }
+  .facts li { font-size: 0.82rem; background: var(--accent-soft); border-radius: 999px; padding: 0.2rem 0.7rem; }
+  .picks { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.8rem; }
+  .pick { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem 1.05rem; min-width: 0; }
+  .pick .role { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600; }
+  .pick .name { font-weight: 650; margin: 0.15rem 0 0.1rem; }
+  .pick .stats { font-size: 0.82rem; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-bottom: 0.45rem; }
+  .pick p { font-size: 0.88rem; margin: 0; }
+  ul.notes { padding-left: 1.1rem; margin: 0; }
+  ul.notes li { margin-bottom: 0.45rem; }
+  .controls { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; margin-bottom: 0.8rem; }
+  .controls input[type=search], .controls select { font: inherit; font-size: 0.9rem; padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--text); }
+  .controls input[type=search] { flex: 1 1 220px; min-width: 0; }
+  .controls label { font-size: 0.82rem; color: var(--text-muted); display: flex; gap: 0.4rem; align-items: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .chip { font: inherit; font-size: 0.8rem; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 0.2rem 0.65rem; cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .chip:focus-visible, th button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .count { font-size: 0.82rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .table-scroll { width: 100%; overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 1150px; }
+  th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th { background: var(--accent-soft); position: sticky; top: 0; }
+  th button { all: unset; cursor: pointer; font-weight: 600; color: var(--text-muted); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; }
+  th button::after { content: " ↕"; opacity: 0.35; }
+  th[aria-sort="ascending"] button::after { content: " ↑"; opacity: 1; }
+  th[aria-sort="descending"] button::after { content: " ↓"; opacity: 1; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--accent-soft); }
+  td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td.model { font-weight: 600; min-width: 170px; }
+  td.model small { display: block; font-weight: 400; color: var(--text-muted); }
+  td.note { min-width: 240px; color: var(--text); }
+  .est { display: inline-block; font-size: 0.68rem; font-weight: 600; color: var(--warn); background: var(--warn-soft); border-radius: 5px; padding: 0 0.35rem; margin-left: 0.3rem; vertical-align: middle; }
+  .fit { display: inline-block; font-size: 0.74rem; font-weight: 600; border-radius: 5px; padding: 0.05rem 0.45rem; white-space: nowrap; }
+  .fit.built { color: var(--good); background: var(--good-soft); }
+  .fit.works { color: var(--accent); background: var(--accent-soft); }
+  .fit.fiddly { color: var(--mid); background: var(--mid-soft); }
+  .fit.poor { color: var(--warn); background: var(--warn-soft); }
+  .sub { color: var(--text-muted); font-size: 0.78rem; display: block; }
+  .footnote { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.6rem; }
+  footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.8rem; }
+  @media (max-width: 520px) { h1 { font-size: 1.35rem; } .wrap { padding-inline: 1rem; padding-block: 1.75rem 3rem; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <p class="breadcrumb"><a href="index.html">Trips</a> &middot; <a href="inventory.html">Gear Inventory</a> &middot; Hammock Comparison</p>
+
+  <div class="col">
+    <h1>Camping hammocks compared</h1>
+    <p class="subtitle">50 hammocks and configurations from 16 makers, including every Warbonnet and Hammock Gear model, checked against a 230 lb sleeper.</p>
+    <ul class="facts">
+      <li>Sleeper: 5′7″, ~230 lb</li>
+      <li>Now using: ENO DoubleNest 19 oz, borrowed Kootek</li>
+      <li>On the wish list: Warbonnet Blackbird</li>
+      <li>Pairs with: Wooki or Incubator underquilt</li>
+    </ul>
+  </div>
+
+  <h2>Short answer</h2>
+  <div class="picks">
+    <div class="pick">
+      <div class="role">Best fit for you</div>
+      <div class="name">Warbonnet Blackbird 10 ft, lightweight double</div>
+      <div class="stats">21.75 oz · comfort to 275 lb · ~$200</div>
+      <p>The single layer's comfort rating stops at 250 lb, which is close for you once gear is in the hammock. The double layer raises that to 275 lb and adds a pad sleeve. It's the hammock the Wooki is cut for.</p>
+    </div>
+    <div class="pick">
+      <div class="role">Best value with a net</div>
+      <div class="name">Hammock Gear Circadian Pro</div>
+      <div class="stats">24.1 oz · 350 lb · $129.99</div>
+      <p>11 ft, 58″ wide, removable bug net, made in Ohio. No footbox or shelf like the Blackbird, but a lot of hammock for the money, and it works with the Incubator.</p>
+    </div>
+    <div class="pick">
+      <div class="role">Budget</div>
+      <div class="name">Onewind Tempest</div>
+      <div class="stats">19.3 oz · 500 lb · $75</div>
+      <p>11 ft with a built-in net, side pulls, underquilt hooks and straps included. A real step up from the DoubleNest for under $100.</p>
+    </div>
+    <div class="pick">
+      <div class="role">No net, lots of capacity</div>
+      <div class="name">Warbonnet Traveler 11 ft, heavy single</div>
+      <div class="stats">16 oz · comfort to 300 lb · ~$85</div>
+      <p>Blackbird-quality fabric and ridgeline without the net or footbox. Good for cool-weather trips when bugs are gone.</p>
+    </div>
+  </div>
+
+  <h2>Compare all 50</h2>
+  <div class="controls">
+    <input type="search" id="q" placeholder="Search brand, model, fabric, notes…" aria-label="Search hammocks">
+    <div class="chips" role="group" aria-label="Type">
+      <button class="chip" data-type="Gathered end" aria-pressed="false">Gathered end</button>
+      <button class="chip" data-type="Bridge" aria-pressed="false">Bridge</button>
+      <button class="chip" data-type="All-in-one" aria-pressed="false">All-in-one</button>
+      <button class="chip" data-type="Lay-flat" aria-pressed="false">Lay-flat</button>
+    </div>
+    <label for="net">Bug net
+      <select id="net"><option value="">Any</option><option value="Built in">Built in</option><option value="Removable">Removable</option><option value="None">None</option></select>
+    </label>
+    <label for="fitsel">Holds 230 lb
+      <select id="fitsel"><option value="">Any</option><option value="good">Comfortably</option><option value="tight">Close to the limit</option><option value="no">Over the limit</option></select>
+    </label>
+    <label for="brandsel">Brand
+      <select id="brandsel"><option value="">Any</option></select>
+    </label>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="table-scroll">
+    <table id="t">
+      <thead><tr>
+        <th data-k="name"><button>Hammock</button></th>
+        <th data-k="type"><button>Type</button></th>
+        <th data-k="w"><button>Weight</button></th>
+        <th data-k="vol"><button>Packed</button></th>
+        <th data-k="cap"><button>Capacity</button></th>
+        <th data-k="fitRank"><button>At 230 lb</button></th>
+        <th data-k="size"><button>Size</button></th>
+        <th data-k="fabric"><button>Fabric</button></th>
+        <th data-k="net"><button>Bug net</button></th>
+        <th data-k="price"><button>Price</button></th>
+        <th data-k="note"><button>Notes</button></th>
+      </tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+  <p class="footnote">Capacity shows the maker's comfort rating where one is published (Warbonnet does this), otherwise the maximum load. "At 230 lb" is comfortable when the comfort rating is 275 lb or more, or the maximum is 300 lb or more; close when either is 250 lb or more; over when it's under 250 lb. Weight is the hammock without straps unless the note says otherwise. <span class="est">est.</span> marks numbers I estimated from a neighboring configuration or the stuff sack size, because the maker doesn't list them. Prices are list prices before suspension upgrades and shipping.</p>
+
+  <div class="col">
+    <h2>What matters for you</h2>
+    <ul class="notes">
+      <li><strong>Capacity.</strong> At ~230 lb plus clothes and anything you bring into the hammock, you're near 250 lb. Skip anything rated 250 lb or less, and treat a 250 lb comfort rating as the edge. That rules out the Hennessy Ultralite Backpacker and Hyperlite, the Dream Darien, the single-layer Ridgerunner, and the Chameleon in its lightest fabric.</li>
+      <li><strong>Single vs double layer.</strong> A double layer adds 5–10 oz but raises capacity and gives you a sleeve for a pad on cold nights. Warbonnet sells both at the same length.</li>
+      <li><strong>10 ft vs 11 ft.</strong> At 5′7″ a 10 ft hammock gives a flat diagonal lay. 11 ft feels roomier and helps if you're broad, at about 3 oz more.</li>
+      <li><strong>Underquilts.</strong> Gathered-end hammocks take almost any gathered-end underquilt. The Wooki only fits the Blackbird and XLC. Bridge hammocks (Ridgerunner, Bear Mountain) need their own bridge underquilt. Lay-flat designs like the Amok and Haven use a sleeping pad instead.</li>
+      <li><strong>All-in-one kits</strong> (Hennessy, Kammok Mantis, ENO SubLink and OneLink, Grand Trunk Air Bivy) include a tarp. Their weight looks high next to bare hammocks for that reason. Their tarps are usually smaller than a Journey or Superfly.</li>
+      <li><strong>Compared to what you have.</strong> The DoubleNest is a 9′4″ open hammock with no ridgeline, so you lie more curved. Any 10–11 ft hammock with a structural ridgeline will lie flatter, even the cheap ones.</li>
+    </ul>
+  </div>
+
+  <footer>Specs gathered October 2026 from maker pages (Warbonnet, Hammock Gear, Dutchware, Hennessy via Liberty Mountain, Kammok, ENO) and reviews from CleverHiker, OutdoorGearLab, Greenbelly, Garage Grown Gear and Advnture. Hummingbird Hammocks closed in 2024 and is left out. Prices and options change often, so confirm on the maker's page before ordering.</footer>
+</div>
+
+<script>
+const WB = "https://www.warbonnetoutdoors.com/product/";
+const HG = "https://hammockgear.com/";
+// brand, model, type, weight oz, wEst, packed L, vEst, comfort lb, max lb, size, fabric, net, price, priceText, pEst, note, url
+const D = [
+  ["Warbonnet","Blackbird 10 ft, single layer","Gathered end",16,0,2.5,1,250,300,"10 ft × 62″","40D Dream-Tex","Built in",175,"$175",0,"Footbox, shelf, side pulls. Comfort rating is right at your weight. Fits the Wooki.",WB+"blackbird/"],
+  ["Warbonnet","Blackbird 10 ft, lightweight double","Gathered end",21.75,0,3,1,275,350,"10 ft × 62″","40D + 15D","Built in",200,"~$200",1,"Pad sleeve between layers. Best Blackbird for your weight.",WB+"blackbird/"],
+  ["Warbonnet","Blackbird 10 ft, heavyweight double","Gathered end",27.75,0,3.5,1,400,400,"10 ft × 62″","40D × 2","Built in",215,"~$215",1,"Bombproof, 6 oz heavier than the lightweight double.",WB+"blackbird/"],
+  ["Warbonnet","Blackbird XLC, single layer","Gathered end",19,0,4.6,0,250,300,"11 ft × 62″","40D Dream-Tex","Removable",200,"$200",0,"Longer (for up to 6′6″) and the net comes off. Needs the 11 ft Wooki.",WB+"blackbird-xlc/"],
+  ["Warbonnet","Blackbird XLC, heavyweight single","Gathered end",23,0,4.6,1,300,350,"11 ft × 62″","Heavy 40D","Removable",215,"~$215",1,"Single layer rated to 300 lb comfort.",WB+"blackbird-xlc/"],
+  ["Warbonnet","Blackbird XLC, lightweight double","Gathered end",25,0,5,1,275,350,"11 ft × 62″","40D + 15D","Removable",225,"~$225",1,"",WB+"blackbird-xlc/"],
+  ["Warbonnet","Blackbird XLC, heavyweight double","Gathered end",29,0,5.5,1,400,400,"11 ft × 62″","40D × 2","Removable",240,"~$240",1,"",WB+"blackbird-xlc/"],
+  ["Warbonnet","Eldorado Gen3","Gathered end",16,0,2.5,1,250,300,"11 ft × ~62″","40D Dream-Tex","Built in",150,"$150",0,"An XLC without the shelf. Same 250 lb comfort limit as the single Blackbird.",WB+"eldorado/"],
+  ["Warbonnet","Traveler 10 ft, single","Gathered end",10.2,0,1.2,1,275,300,"10 ft × 62″","40D nylon","None",70,"from $70",0,"Fixed ridgeline, no net or footbox.",WB+"traveler-hammock/"],
+  ["Warbonnet","Traveler 11 ft, single","Gathered end",12.5,0,1.4,1,275,300,"11 ft × 62″","40D nylon","None",75,"~$75",1,"",WB+"traveler-hammock/"],
+  ["Warbonnet","Traveler 11 ft, heavy single","Gathered end",16,0,1.8,1,300,350,"11 ft × 62″","70D nylon","None",85,"~$85",1,"Most capacity per ounce in the Warbonnet line.",WB+"traveler-hammock/"],
+  ["Warbonnet","Traveler 11 ft, heavyweight double","Gathered end",24,0,2.5,1,400,400,"11 ft × 62″","40D × 2","None",100,"~$100",1,"",WB+"traveler-hammock/"],
+  ["Warbonnet","Ridgerunner, single, with net","Bridge",29,0,5,1,null,200,"7 ft body, 44″ ends","40D","Built in",130,"from $130",0,"Weight includes 12 oz spreader bars. 200 lb limit rules it out.",WB+"ridgerunner-hammock/"],
+  ["Warbonnet","Ridgerunner, double, with net","Bridge",33,0,5.5,1,null,250,"7 ft body, 44″ ends","40D × 2","Built in",165,"~$165",1,"Flattest lay of any Warbonnet, but at its limit for you and needs a bridge underquilt.",WB+"ridgerunner-hammock/"],
+  ["Warbonnet","Ridgerunner, double, no net","Bridge",30.6,0,5,1,null,250,"7 ft body, 44″ ends","40D × 2","None",150,"~$150",1,"",WB+"ridgerunner-hammock/"],
+  ["Hammock Gear","Circadian","Gathered end",23.1,0,5.6,0,null,350,"11 ft × 58″","40D hex ripstop","Built in",119.99,"$119.99",0,"Net is sewn on. Includes ridgeline, loops and carabiners.",HG+"circadian"],
+  ["Hammock Gear","Circadian Pro, 11 ft single","Gathered end",24.1,0,5.6,0,null,350,"11 ft × 58″","40D hex ripstop","Removable",129.99,"$129.99",0,"Net zips off (5.1 oz). Pack hooks for an underquilt.",HG+"circadian-pro"],
+  ["Hammock Gear","Circadian Pro, 12 ft double","Gathered end",30.8,0,6.5,1,null,600,"12 ft × 58″","40D + 20D","Removable",180,"~$180",1,"CleverHiker's tested config. Huge inside; heavy for 3-season.",HG+"circadian-pro"],
+  ["Hammock Gear","Standard Hammock, 40D","Gathered end",13.5,0,1.5,1,null,350,"11 or 12 ft × 58″","40D nylon","None",59.99,"$59.99",0,"Weight includes suspension. Add HG's bottom-entry net if needed.",HG+"product/standard-hammock/"],
+  ["Hammock Gear","Standard Hammock, 70D","Gathered end",17,1,1.8,1,null,500,"11 or 12 ft × 58″","70D nylon","None",69.99,"~$70",1,"Cheapest high-capacity hammock with a structural ridgeline.",HG+"product/standard-hammock/"],
+  ["Dutchware","Chameleon, Hexon 1.2","Gathered end",21.6,0,4,1,null,275,"11 ft × 57″","Hexon 1.2","Removable",152,"$152",0,"Modular: net and top cover zip on either side.","https://dutchwaregear.com/product/chameleon-hammock/"],
+  ["Dutchware","Chameleon, Hexon 1.6","Gathered end",24,1,4.2,1,null,350,"11 ft × 57″","Hexon 1.6","Removable",160,"~$160",1,"The fabric to pick at your weight.","https://dutchwaregear.com/product/chameleon-hammock/"],
+  ["Dutchware","Chameleon, Hexon 1.0","Gathered end",19,1,3.8,1,null,200,"11 ft × 57″","Hexon 1.0","Removable",160,"~$160",1,"Lightest fabric, but rated to 200 lb.","https://dutchwaregear.com/product/chameleon-hammock/"],
+  ["Dream Hammock","Darien","Gathered end",17,0,3,1,null,225,"11 ft × 5.4 ft","Custom nylon","Built in",140,"$140",0,"Very light with a net, but 225 lb limit.","https://dream-hammock.com/pages/hammock-models"],
+  ["Dream Hammock","Sparrow","Gathered end",22,1,4,1,null,300,"11 ft × ~5.4 ft","Custom, fabric sets capacity","Removable",200,"~$200",1,"Flagship custom hammock with zip-off net and top cover. Ask for a fabric rated over 300 lb.","https://dream-hammock.com/pages/hammock-models"],
+  ["Hennessy","Expedition Asym Zip","All-in-one",44,0,4.1,0,null,250,"118 × 59″","70D nylon","Built in",169.95,"$169.95",0,"Includes rain fly. Fits up to 6′. At your limit.","https://libertymountain.com/camp-hike/hennessy-expedition-asym-hammock-ntn14612.html"],
+  ["Hennessy","Explorer Deluxe Asym Zip","All-in-one",51,0,7.9,0,null,300,"130 × 59″","140D nylon","Built in",219.95,"$219.95",0,"Includes 14 oz fly. Heavy but tough.","https://libertymountain.com/camp-hike/hennessy-explorer-deluxe-asym-hammock-ntn14613.html"],
+  ["Hennessy","Ultralite Backpacker Zip","All-in-one",22.4,0,3.5,1,null,200,"10 ft × 4.9 ft","Light nylon","Built in",240,"$240",0,"Hammock-only weight. 200 lb limit.","https://www.cleverhiker.com/best-camping-hammocks"],
+  ["Hennessy","Hyperlite Asym Zip","All-in-one",28,0,4,1,null,200,"126 × 60″","30D nylon","Built in",279.95,"$279.95",0,"200 lb limit.","https://www.greenbelly.co/pages/best-hammock-tent"],
+  ["Kammok","Mantis UL","All-in-one",36,0,5.4,0,null,300,"120 × 56″","20D Levitas","Removable",319.95,"$319.95",0,"Total packed weight incl. 15D fly. Trail weight 32 oz.","https://kammok.com/products/mantis-ul-hammock-tent"],
+  ["Kammok","Roo Single UL","Gathered end",5.9,0,0.8,0,null,300,"100 × 50″","20D Levitas","None",94.95,"$94.95",0,"Tiny and light, but short and narrow for a structural-ridgeline lay.","https://kammok.com/products/roo-single-ultralight"],
+  ["Kammok","Roo Single","Gathered end",11.4,0,1.2,1,null,500,"100 × 50″","40D ripstop","None",74.95,"$74.95",0,"Day/camp hammock; short for sleeping.","https://www.greenbelly.co/pages/best-hammock-tent"],
+  ["Kammok","Roo Double","Gathered end",24,0,2.5,1,null,500,"10 ft × 5′10″","40D ripstop","None",95,"$95",0,"Like a roomier DoubleNest.","https://www.outdoorgearlab.com/topics/camping-and-hiking/best-hammock"],
+  ["ENO","SingleNest","Gathered end",16,0,1.7,0,null,400,"9′6″ × 4′10″","70D nylon","None",54.95,"$54.95",0,"Short, no ridgeline.","https://www.eaglesnestoutfittersinc.com/product/singlenest.html"],
+  ["ENO","DoubleNest","Gathered end",19,0,1.9,0,null,400,"9′4″ × 6′2″","70D nylon","None",74.95,"~$75",1,"What you have now.","https://www.eaglesnestoutfittersinc.com/"],
+  ["ENO","JungleNest","Gathered end",19.2,0,2.5,1,null,300,"9.8 × 4.6 ft","Nylon","Built in",110,"$110",0,"Short for a flat lay.","https://www.cleverhiker.com/best-camping-hammocks"],
+  ["ENO","JungleLink","All-in-one",24.5,0,3.5,1,null,300,"10 × 4′10″","Nylon","Built in",220,"$220",0,"","https://www.outdoorgearlab.com/topics/camping-and-hiking/best-hammock"],
+  ["ENO","SubLink Shelter System","All-in-one",39,0,5,1,null,300,"105 × 47″","Nylon","Built in",264.95,"$264.95",0,"Includes fly and suspension.","https://www.greenbelly.co/pages/best-hammock-tent"],
+  ["ENO","OneLink with DoubleNest","All-in-one",39,0,6,1,null,400,"9′4″ × 6′2″","30D + 70D nylon","Removable",299.95,"~$300",1,"DoubleNest, net, fly and straps as a set.","https://www.rei.com/product/129825/eno-onelink-shelter-system-with-doublenest-hammock"],
+  ["Onewind","Tempest","Gathered end",19.3,0,3,1,null,500,"11 × 5.3 ft","40D nylon","Built in",75,"$75",0,"Straps, stakes, ridgeline pocket and UQ hooks included.","https://www.cleverhiker.com/backpacking/onewind-tempest-hammock-review/"],
+  ["Onewind","Aerie Double","Gathered end",26.95,0,3.5,1,null,500,"11 ft × 5′8″","Nylon","Built in",70,"$70",0,"Wider, heavier sibling of the Tempest.","https://www.outdoorgearlab.com/topics/camping-and-hiking/best-hammock"],
+  ["Grand Trunk","Skeeter Beeter Pro","Gathered end",35,0,3.5,1,null,400,"126 × 60″","70D parachute nylon","Built in",89.95,"$89.95",0,"Heavy but tough.","https://www.greenbelly.co/pages/best-hammock-tent"],
+  ["Grand Trunk","Air Bivy","All-in-one",53,0,7,1,null,400,"10.5 × 5 ft","Nylon","Built in",180,"$180",0,"","https://www.cleverhiker.com/best-camping-hammocks"],
+  ["Exped","Scout Combi UL","All-in-one",18.9,0,3,1,null,265,"116 × 55″","15D ripstop","Built in",279,"$279",0,"Light, but close to your limit.","https://www.greenbelly.co/pages/best-hammock-tent"],
+  ["Jacks R Better","Bear Mountain Bridge","Bridge",29,0,5,1,null,250,"132 × 52″","70D ripstop","Built in",184.95,"$184.95",0,"Needs a bridge underquilt.","https://www.greenbelly.co/pages/best-hammock-tent"],
+  ["Amok","Draumr 5.0","Lay-flat",45,0,6,1,null,null,"73 × 28″ platform","70D ripstop","Built in",200,"$200",0,"Lies flat across the hammock; also converts to a chair. Uses a pad, not an underquilt.","https://advnture.com/reviews/amok-draumr-5.0-hammock"],
+  ["Haven","XL lay-flat tent","Lay-flat",115,0,10,1,null,null,"80 × 30″ floor","Polyester + 20D fly","Built in",365,"$365",0,"Flat lay with fly; heaviest here at 7.2 lb.","https://wildernesstimes.com/tents/compare/haven-xl-lay-flat-hammock-tent-review-vs-kammock-mantis-ultralight-backpacking-hammock-tent-review/"],
+  ["Covacure","Camping Hammock","Gathered end",17.8,0,2.5,1,null,772,"9.5 × 4.6 ft","Nylon","Built in",26,"$26",0,"Capacity claim is marketing; short for a flat lay.","https://www.cleverhiker.com/best-camping-hammocks"],
+  ["Wise Owl","DoubleOwl kit","Gathered end",30,0,2.5,1,null,500,"10 × 6′6″","Nylon","None",50,"$50",0,"Kit weight with straps.","https://www.outdoorgearlab.com/topics/camping-and-hiking/best-hammock"],
+  ["Kootek","Portable hammock","Gathered end",22.6,0,1.8,1,null,500,"~10 × 6.5 ft","210T nylon","None",30,"~$30",1,"Borrowed one you've used. Capacity is the seller's claim.","https://www.outdoorgearlab.com/topics/camping-and-hiking/best-hammock"],
+];
+const FITL = {good:["Comfortably",0,"built"],tight:["Close",1,"fiddly"],no:["Over limit",2,"poor"],unk:["Not listed",3,"works"]};
+function fitOf(c,m){ if(c!=null) return c>=275?"good":c>=250?"tight":"no"; if(m==null) return "unk"; return m>=300?"good":m>=250?"tight":"no"; }
+const rows = D.map(r=>{const f=fitOf(r[7],r[8]);return {brand:r[0],model:r[1],name:r[0]+" "+r[1],type:r[2],w:r[3],wEst:r[4],vol:r[5],vEst:r[6],comfort:r[7],max:r[8],cap:r[7]??r[8],size:r[9],fabric:r[10],net:r[11],price:r[12],priceT:r[13],pEst:r[14],note:r[15],url:r[16],fit:f,fitRank:FITL[f][1]};});
+const est = b => b ? '<span class="est">est.</span>' : '';
+const g = oz => Math.round(oz*28.35).toLocaleString();
+const bsel=document.getElementById("brandsel");
+[...new Set(rows.map(r=>r.brand))].sort().forEach(b=>{const o=document.createElement("option");o.textContent=b;bsel.appendChild(o);});
+let sortK=null, sortDir=1;
+const state={q:"",type:new Set(),net:"",fit:"",brand:""};
+function capText(r){ if(r.comfort!=null) return `${r.comfort} lb<span class="sub">comfort; max ${r.max}</span>`; if(r.max!=null) return `${r.max} lb<span class="sub">max</span>`; return '<span class="sub">not listed</span>'; }
+function render(){
+  let list=rows.filter(r=>{
+    if(state.q){const s=(r.name+" "+r.type+" "+r.fabric+" "+r.net+" "+r.note+" "+r.size).toLowerCase(); if(!state.q.split(/\s+/).every(t=>s.includes(t))) return false;}
+    if(state.type.size && !state.type.has(r.type)) return false;
+    if(state.net && r.net!==state.net) return false;
+    if(state.fit && r.fit!==state.fit) return false;
+    if(state.brand && r.brand!==state.brand) return false;
+    return true;
+  });
+  if(sortK){ list.sort((a,b)=>{let x=a[sortK],y=b[sortK]; if(x==null) return 1; if(y==null) return -1; return (typeof x==="string"?x.localeCompare(y):x-y)*sortDir;}); }
+  document.getElementById("tb").innerHTML=list.map(r=>`<tr>
+    <td class="model"><a href="${r.url}" target="_blank" rel="noopener">${r.model}</a><small>${r.brand}</small></td>
+    <td>${r.type}</td>
+    <td class="num">${r.w} oz${est(r.wEst)}<span class="sub">${g(r.w)} g</span></td>
+    <td class="num">${r.vol} L${est(r.vEst)}</td>
+    <td class="num">${capText(r)}</td>
+    <td><span class="fit ${FITL[r.fit][2]}">${FITL[r.fit][0]}</span></td>
+    <td>${r.size}</td>
+    <td>${r.fabric}</td>
+    <td>${r.net}</td>
+    <td class="num">${r.priceT}${est(r.pEst)}</td>
+    <td class="note">${r.note||''}</td></tr>`).join("");
+  document.getElementById("count").textContent=`${list.length} of ${rows.length} shown`;
+}
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value.trim().toLowerCase();render();});
+document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{const v=b.dataset.type;const on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",on);on?state.type.add(v):state.type.delete(v);render();}));
+document.getElementById("net").addEventListener("change",e=>{state.net=e.target.value;render();});
+document.getElementById("fitsel").addEventListener("change",e=>{state.fit=e.target.value;render();});
+bsel.addEventListener("change",e=>{state.brand=e.target.value;render();});
+document.querySelectorAll("th").forEach(th=>th.querySelector("button").addEventListener("click",()=>{
+  const k=th.dataset.k; if(sortK===k) sortDir=-sortDir; else {sortK=k;sortDir=1;}
+  document.querySelectorAll("th").forEach(h=>h.removeAttribute("aria-sort"));
+  th.setAttribute("aria-sort",sortDir===1?"ascending":"descending"); render();
+}));
+render();
+</script>
+
+</body>
+</html>
