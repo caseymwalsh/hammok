@@ -574,5 +574,89 @@
 
 
 
+<style>
+  .map-card img { cursor: zoom-in; }
+  .lb { position: fixed; inset: 0; z-index: 1000; background: rgba(10,9,8,0.94); display: none; flex-direction: column; }
+  .lb.open { display: flex; }
+  .lb-stage { flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center; touch-action: pan-x pan-y pinch-zoom; }
+  .lb-stage img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; user-select: none; -webkit-user-drag: none; }
+  .lb.zoomed .lb-stage { align-items: flex-start; justify-content: flex-start; }
+  .lb.zoomed .lb-stage img { max-width: none; max-height: none; cursor: zoom-out; }
+  .lb-bar { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 1rem calc(0.6rem + env(safe-area-inset-bottom, 0px)); color: #ece7dc; font: 0.85rem -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .lb-cap { flex: 1; min-width: 0; color: #c9c1b2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lb-count { color: #a89e8c; white-space: nowrap; }
+  .lb-btn { background: rgba(255,255,255,0.12); color: #fff; border: 0; border-radius: 999px; width: 2.6rem; height: 2.6rem; font-size: 1.3rem; line-height: 1; cursor: pointer; flex: none; }
+  .lb-btn:hover { background: rgba(255,255,255,0.22); }
+  .lb-btn[hidden] { display: none; }
+  .lb-close { position: absolute; top: calc(0.75rem + env(safe-area-inset-top, 0px)); right: 0.75rem; }
+</style>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <div class="lb-stage" id="lb-stage"><img id="lb-img" alt=""></div>
+  <button class="lb-btn lb-close" id="lb-close" aria-label="Close">&times;</button>
+  <div class="lb-bar">
+    <button class="lb-btn" id="lb-prev" aria-label="Previous photo">&#8249;</button>
+    <span class="lb-cap" id="lb-cap"></span>
+    <span class="lb-count" id="lb-count"></span>
+    <button class="lb-btn" id="lb-next" aria-label="Next photo">&#8250;</button>
+  </div>
+</div>
+<script>
+(function () {
+  var lb = document.getElementById('lb'), stage = document.getElementById('lb-stage'), big = document.getElementById('lb-img');
+  var cap = document.getElementById('lb-cap'), count = document.getElementById('lb-count');
+  var prev = document.getElementById('lb-prev'), next = document.getElementById('lb-next');
+  var groups = {}, current = [], idx = 0, heading = 'Photos';
+  var walker = document.querySelectorAll('h2, h3, .map-card img');
+  Array.prototype.forEach.call(walker, function (el) {
+    if (el.tagName === 'H2' || el.tagName === 'H3') { heading = el.textContent.trim(); return; }
+    var g = groups[heading] || (groups[heading] = []);
+    var card = el.closest('.map-card'); var c = card && card.querySelector('.map-caption');
+    var item = { src: el.currentSrc || el.src, alt: el.alt || '', cap: c ? c.textContent.trim() : '' };
+    g.push(item);
+    var list = g, pos = g.length - 1;
+    el.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); open(list, pos); });
+  });
+  function show() {
+    var it = current[idx];
+    lb.classList.remove('zoomed');
+    big.src = it.src; big.alt = it.alt;
+    cap.textContent = it.cap || it.alt;
+    count.textContent = current.length > 1 ? (idx + 1) + ' / ' + current.length : '';
+    prev.hidden = next.hidden = current.length < 2;
+  }
+  function open(list, i) { current = list; idx = i; show(); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function close() { lb.classList.remove('open'); document.body.style.overflow = ''; big.removeAttribute('src'); }
+  function step(d) { if (current.length < 2) return; idx = (idx + d + current.length) % current.length; show(); }
+  prev.addEventListener('click', function () { step(-1); });
+  next.addEventListener('click', function () { step(1); });
+  document.getElementById('lb-close').addEventListener('click', close);
+  stage.addEventListener('click', function (e) { if (e.target === stage) close(); });
+  big.addEventListener('click', function (e) {
+    var zoomed = lb.classList.toggle('zoomed');
+    if (zoomed) {
+      var r = big.getBoundingClientRect();
+      var fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+      requestAnimationFrame(function () {
+        stage.scrollLeft = fx * big.scrollWidth - stage.clientWidth / 2;
+        stage.scrollTop = fy * big.scrollHeight - stage.clientHeight / 2;
+      });
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'ArrowRight') step(1);
+  });
+  var sx = null, sy = null;
+  stage.addEventListener('touchstart', function (e) { if (e.touches.length === 1 && !lb.classList.contains('zoomed')) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; } else sx = null; }, { passive: true });
+  stage.addEventListener('touchend', function (e) {
+    if (sx === null) return;
+    var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+
 </body>
 </html>
