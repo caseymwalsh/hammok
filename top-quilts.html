@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Top Quilt Comparison</title>
+<style>
+  /* Layout: one reading column for picks + notes, then a full-width filterable table that scrolls sideways on its own. Same look as the underquilt page and gear inventory's sage-and-canvas palette. */
+  :root {
+    --bg: #faf8f4;
+    --surface: #ffffff;
+    --border: #e3ddd0;
+    --text: #2b2620;
+    --text-muted: #746b5c;
+    --accent: #5f7a52;
+    --accent-soft: #eef2e9;
+    --warn: #a05a2c;
+    --warn-soft: #fbf0e6;
+    --good: #3f7a4a;
+    --good-soft: #e5f1e6;
+    --mid: #8a6d1f;
+    --mid-soft: #f6efd9;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1c1a17; --surface: #26231e; --border: #3a352c; --text: #ece7dc; --text-muted: #a89e8c;
+      --accent: #8fae7c; --accent-soft: #2c3527; --warn: #d99a63; --warn-soft: #3a2c1f;
+      --good: #8cc595; --good-soft: #233428; --mid: #d6b75e; --mid-soft: #382f17;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1c1a17; --surface: #26231e; --border: #3a352c; --text: #ece7dc; --text-muted: #a89e8c;
+    --accent: #8fae7c; --accent-soft: #2c3527; --warn: #d99a63; --warn-soft: #3a2c1f;
+    --good: #8cc595; --good-soft: #233428; --mid: #d6b75e; --mid-soft: #382f17;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-inline: 1.25rem; padding-block: 2.5rem 4rem; }
+  .col { max-width: 760px; }
+  .breadcrumb { font-size: 0.85rem; margin: 0 0 1.25rem; }
+  a { color: var(--accent); }
+  .breadcrumb a { text-decoration: none; }
+  h1 { font-size: 1.6rem; margin: 0 0 0.35rem; letter-spacing: -0.01em; text-wrap: balance; }
+  .subtitle { color: var(--text-muted); font-size: 0.95rem; margin: 0; }
+  h2 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin: 2.5rem 0 1rem; }
+  p { margin: 0 0 0.8rem; }
+  .facts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.1rem 0 0; padding: 0; list-style: none; }
+  .facts li { font-size: 0.82rem; background: var(--accent-soft); border-radius: 999px; padding: 0.2rem 0.7rem; }
+  .picks { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.8rem; }
+  .pick { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem 1.05rem; min-width: 0; }
+  .pick .role { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600; }
+  .pick .name { font-weight: 650; margin: 0.15rem 0 0.1rem; }
+  .pick .stats { font-size: 0.82rem; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-bottom: 0.45rem; }
+  .pick p { font-size: 0.88rem; margin: 0; }
+  ul.notes { padding-left: 1.1rem; margin: 0; }
+  ul.notes li { margin-bottom: 0.45rem; }
+  .controls { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; margin-bottom: 0.8rem; }
+  .controls input[type=search], .controls select { font: inherit; font-size: 0.9rem; padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--text); }
+  .controls input[type=search] { flex: 1 1 220px; min-width: 0; }
+  .controls label { font-size: 0.82rem; color: var(--text-muted); display: flex; gap: 0.4rem; align-items: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .chip { font: inherit; font-size: 0.8rem; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 0.2rem 0.65rem; cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .chip:focus-visible, th button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .count { font-size: 0.82rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .table-scroll { width: 100%; overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 1150px; }
+  th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th { background: var(--accent-soft); position: sticky; top: 0; }
+  th button { all: unset; cursor: pointer; font-weight: 600; color: var(--text-muted); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; }
+  th button::after { content: " ↕"; opacity: 0.35; }
+  th[aria-sort="ascending"] button::after { content: " ↑"; opacity: 1; }
+  th[aria-sort="descending"] button::after { content: " ↓"; opacity: 1; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--accent-soft); }
+  td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td.model { font-weight: 600; min-width: 170px; }
+  td.model small { display: block; font-weight: 400; color: var(--text-muted); }
+  td.note { min-width: 240px; color: var(--text); }
+  .est { display: inline-block; font-size: 0.68rem; font-weight: 600; color: var(--warn); background: var(--warn-soft); border-radius: 5px; padding: 0 0.35rem; margin-left: 0.3rem; vertical-align: middle; }
+  .fit { display: inline-block; font-size: 0.74rem; font-weight: 600; border-radius: 5px; padding: 0.05rem 0.45rem; white-space: nowrap; }
+  .fit.built { color: var(--good); background: var(--good-soft); }
+  .fit.works { color: var(--accent); background: var(--accent-soft); }
+  .fit.fiddly { color: var(--mid); background: var(--mid-soft); }
+  .fit.poor { color: var(--warn); background: var(--warn-soft); }
+  .sub { color: var(--text-muted); font-size: 0.78rem; display: block; }
+  .footnote { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.6rem; }
+  footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.8rem; }
+  @media (max-width: 520px) { h1 { font-size: 1.35rem; } .wrap { padding-inline: 1rem; padding-block: 1.75rem 3rem; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <p class="breadcrumb"><a href="index.html">Trips</a> &middot; <a href="inventory.html">Gear Inventory</a> &middot; Top Quilt Comparison</p>
+
+  <div class="col">
+    <h1>Top quilts compared</h1>
+    <p class="subtitle">31 top quilt configurations from 13 makers, checked against a Circadian Pro + Incubator 20&deg;F setup and a 230 lb, 5&prime;7&Prime; sleeper.</p>
+    <ul class="facts">
+      <li>Sleeper: 5&prime;7&Prime;, ~230 lb</li>
+      <li>Underquilt planned: Incubator 20&deg;F</li>
+      <li>Bishop bag: Warbonnet Big Pig, 18.5 L</li>
+      <li>Target: 20&deg;F for spring and fall in upstate NY</li>
+    </ul>
+  </div>
+
+  <h2>Short answer</h2>
+  <div class="picks">
+    <div class="pick">
+      <div class="role">Best match</div>
+      <div class="name">Hammock Gear Burrow 20&deg;F, short</div>
+      <div class="stats">~23 oz &middot; 8.5 L &middot; ~$280</div>
+      <p>Same maker, down and fabric as your Incubator, and the same lead time, so they ship together. Short length fits up to about 5&prime;9&Prime;. Pick the 55&Prime; standard width if you also sleep on the ground; 50&Prime; slim is enough in a hammock.</p>
+    </div>
+    <div class="pick">
+      <div class="role">Most room</div>
+      <div class="name">Jacks R Better Big Meadows 20&deg;F</div>
+      <div class="stats">24 oz &middot; 55&Prime; wide &middot; $299.95</div>
+      <p>Wide cut that drapes over broad shoulders without gaps. Good if you'll also use it on the ground.</p>
+    </div>
+    <div class="pick">
+      <div class="role">Lighter premium</div>
+      <div class="name">UGQ Bandit 20&deg;F</div>
+      <div class="stats">~19&ndash;22 oz &middot; from $299.95</div>
+      <p>Highly customizable (width, length, footbox, 850 or 950 down). About 5&ndash;6 weeks to ship.</p>
+    </div>
+    <div class="pick">
+      <div class="role">Budget</div>
+      <div class="name">Paria Thermodown 30&deg;F</div>
+      <div class="stats">32 oz &middot; ~5.5 L &middot; $160</div>
+      <p>Real down for a low price. Heavier and less warm than the others, so it's best as a starter quilt or for warmer nights.</p>
+    </div>
+  </div>
+
+  <h2>Compare all 31</h2>
+  <div class="controls">
+    <input type="search" id="q" placeholder="Search brand, model, fill, notes…" aria-label="Search quilts">
+    <div class="chips" role="group" aria-label="Rating">
+      <button class="chip" data-t="40" aria-pressed="false">40&deg;F</button>
+      <button class="chip" data-t="30" aria-pressed="false">30&deg;F</button>
+      <button class="chip" data-t="20" aria-pressed="false">20&deg;F</button>
+      <button class="chip" data-t="10" aria-pressed="false">10&deg;F</button>
+      <button class="chip" data-t="0" aria-pressed="false">0&deg;F</button>
+    </div>
+    <label for="brandsel">Brand
+      <select id="brandsel"><option value="">Any</option></select>
+    </label>
+    <label for="pigsel">Big Pig
+      <select id="pigsel"><option value="">Any</option><option value="yes">Fits with hammock + UQ</option><option value="no">Pack separately</option></select>
+    </label>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="table-scroll">
+    <table id="t">
+      <thead><tr>
+        <th data-k="name"><button>Quilt</button></th>
+        <th data-k="temp"><button>Rating</button></th>
+        <th data-k="w"><button>Weight</button></th>
+        <th data-k="vol"><button>Packed</button></th>
+        <th data-k="fill"><button>Fill</button></th>
+        <th data-k="width"><button>Width</button></th>
+        <th data-k="price"><button>Price</button></th>
+        <th data-k="pigRank"><button>Big Pig</button></th>
+        <th data-k="note"><button>Notes</button></th>
+      </tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+  <p class="footnote">Weights are for the regular size unless the row says otherwise. Ratings are each maker's own, and makers rate differently; Hammock Gear and Warbonnet use conservative comfort ratings. "Big Pig" assumes the Circadian Pro and Incubator 20&deg;F (~14 L) are already inside the 18.5 L bag, leaving about 4.5 L, so only quilts that pack to about 4.5 L or less fit with them. <span class="est">est.</span> marks numbers I estimated from a neighboring temperature or size because the maker doesn't publish them. Prices are list prices before options like draft collars and overfill.</p>
+
+  <div class="col">
+    <h2>What matters for you</h2>
+    <ul class="notes">
+      <li><strong>Width.</strong> In a hammock the sides wrap around you, so a 50&Prime; quilt is usually enough; Hammock Gear recommends slim for hammock use. On the ground, a broad sleeper wants 55&Prime; or more so the edges reach the pad.</li>
+      <li><strong>Length.</strong> At 5&prime;7&Prime;, short or regular is right. Short saves an ounce or two and a little money.</li>
+      <li><strong>Footbox.</strong> A zippered footbox opens flat as a blanket on warm nights; a sewn one is warmer and slightly lighter. Either works in a hammock.</li>
+      <li><strong>Ratings line up with the Incubator.</strong> A 20&deg;F top quilt with your 20&deg;F underquilt is a matched pair. A 30&deg;F top quilt plus warm clothes also covers most of spring and fall.</li>
+      <li><strong>Packing.</strong> Only 40&deg;F quilts fit in the Big Pig alongside the hammock and Incubator. A 20&deg;F top quilt goes in its own stuff sack or loose in the dry bag.</li>
+      <li><strong>Pad straps and draft collars</strong> matter more on the ground than in a hammock. Skip them for hammock-only use to save money.</li>
+    </ul>
+  </div>
+
+  <footer>Specs gathered October 2026 from maker pages (Hammock Gear, Warbonnet, Jacks R Better, UGQ) and reviews from Greenbelly, SectionHiker and PackStack. Prices and options change often, so confirm on the maker's page before ordering.</footer>
+</div>
+
+<script>
+const HG="https://hammockgear.com/product/burrow/";
+const WB="https://www.warbonnetoutdoors.com/product/";
+const JRB="https://jacksrbetter.com/products/";
+const GB="https://greenbelly.co/pages/best-backpacking-quilts";
+// brand, model, temp, weight oz, wEst, packed L, vEst, fill, width, price, priceText, pEst, note, url
+const D=[
+ ["Hammock Gear","Burrow 40°F, short",40,17,1,4.5,0,"850 down","50–60″",239.95,"$239.95",0,"Base price is the 40°F short. Fits in the Big Pig with the hammock and Incubator.",HG],
+ ["Hammock Gear","Economy Burrow 40°F",40,17.67,0,4.5,0,"850 down","50–60″",224.95,"$224.95",0,"Greenbelly's tested quilt. Vertical baffles, 15–20% overfill.",GB],
+ ["Hammock Gear","Burrow 30°F, standard",30,21.8,0,5.5,1,"850 down, 12.8 oz fill","50–60″",274.95,"~$275",1,"Weight is Hammock Gear's own figure for the standard length.",HG],
+ ["Hammock Gear","Burrow 20°F, short",20,23,1,8.5,0,"850 down","50–60″",279.95,"~$280",1,"Matches your Incubator 20°F. Short fits up to ~5′9″.",HG],
+ ["Hammock Gear","Burrow 20°F, standard",20,25,1,8.5,0,"850 down","50–60″",294.95,"~$295",1,"Standard length adds $15.",HG],
+ ["Hammock Gear","Burrow 10°F, standard",10,28,1,8.5,1,"850 down","50–60″",304.95,"~$305",1,"",HG],
+ ["Hammock Gear","Burrow 0°F, standard",0,31,1,10,1,"850 down","50–60″",314.95,"~$315",1,"Winter.",HG],
+ ["Warbonnet","Diamondback 40°F",40,17,1,4.5,1,"850 or 900 down","50/55/60″",289,"from $289",0,"Made to order, 5–6 weeks. Optional hammock/ground cut +$40.",WB+"custom-diamondback-topquilt-20-degree/"],
+ ["Warbonnet","Diamondback 30°F",30,20,1,6,1,"850 or 900 down","50/55/60″",300,"from $300",0,"",WB+"custom-diamondback-topquilt-20-degree/"],
+ ["Warbonnet","Diamondback 20°F",20,23.4,0,7.5,1,"850 down, 15.5 oz fill","50/55/60″",340,"from $340",0,"Was from $325 a few weeks ago. 5–6 week lead time.",WB+"custom-diamondback-topquilt-20-degree/"],
+ ["Warbonnet","Diamondback 10°F",10,30.1,0,9,1,"900 down, 19.5 oz fill","50/55/60″",350,"from $350",0,"SectionHiker's tested quilt; claimed weight.",WB+"custom-diamondback-topquilt-20-degree/"],
+ ["Warbonnet","Diamondback 0°F",0,33,1,10,1,"850 or 900 down","50/55/60″",375,"from $375",0,"",WB+"custom-diamondback-topquilt-20-degree/"],
+ ["Warbonnet","Diamondback Scandinavian",-10,37,1,12,1,"850 or 900 down","50/55/60″",423,"from $423",0,"Deep winter; rating shown is approximate.",WB+"custom-diamondback-topquilt-20-degree/"],
+ ["UGQ","Bandit 40°F",40,15,1,4.5,1,"850 or 950 down","Slim–XWide",204.95,"from $204.95",0,"Cheapest premium option. 5–6 week lead time.","https://www.packstack.io/reviews/sleep-system/ugq-bandit-top-quilt"],
+ ["UGQ","Bandit 20°F (850)",20,22.3,0,7.5,1,"850 down, 15.9 oz fill","Slim–XWide",299.95,"$299.95",0,"Greenbelly's tested quilt. Customizable footbox and taper.",GB],
+ ["UGQ","Bandit 20°F (950)",20,19,0,7,1,"950 down","Regular",360,"~$360",1,"An owner's build with draft collar weighed 19 oz.","https://www.packstack.io/reviews/sleep-system/ugq-bandit-top-quilt"],
+ ["UGQ","Bandit 0°F",0,25.1,0,10,1,"850 or 950 down","Slim–XWide",400,"~$400",1,"","https://www.packstack.io/reviews/sleep-system/ugq-bandit-top-quilt"],
+ ["Jacks R Better","Shenandoah 40°F",40,14.5,0,4.5,1,"850 down","48″",189.95,"$189.95",0,"Multi-use: top quilt or underquilt.",JRB+"shenandoah-40-degree-multifunction-summer-camping-quilt"],
+ ["Jacks R Better","Big Meadows 40°F",40,16.9,0,4.5,1,"850 down","55″",199.95,"$199.95",0,"Wide summer quilt.",JRB+"big-meadows-40-degree-wide-summer-camping-quilt"],
+ ["Jacks R Better","Big Meadows 20°F",20,24,0,8,1,"850 down","55″",299.95,"$299.95",0,"Wide; good for broad shoulders and ground use.",JRB+"big-meadows-20-degree-wide-three-season-camping-quilt"],
+ ["Jacks R Better","Big Meadows UL 20°F",20,16.5,0,6,1,"850 down, UL shell","55″",469,"$469",0,"Same width, 7.5 oz lighter, $170 more.",JRB+"big-meadows-ultralight-20-degree-wide-three-season-backpacking-quilt"],
+ ["Jacks R Better","Hudson River 20°F",20,21.5,0,8,1,"850 down","48″",279.95,"$279.95",0,"Multi-use: top quilt or underquilt.",JRB+"hudson-river-quilt-20f-3-season-hammock-quilt"],
+ ["Jacks R Better","Sierra Sniveller 20°F",20,25,0,8,1,"850 down","55″",389,"$389",0,"Wearable: has a head hole so you can wear it around camp.","https://jacksrbetter.com/pages/quilt-comparison-chart"],
+ ["Jacks R Better","Big Meadows 0°F",0,28,0,10,1,"850 down","55″",349.95,"$349.95",0,"",JRB+"big-meadows-0-degree-wide-winter-camping-quilt"],
+ ["Enlightened Equipment","Revelation 20°F",20,20.9,0,7,1,"850 down, 13 oz fill","Regular",335,"$335",0,"Opens flat as a blanket or zips into a footbox. Lots of custom options.",GB],
+ ["REI Co-op","Magma Trail Quilt 30°F",30,19,0,5,1,"850 down, 10.5 oz fill","Regular",329,"$329",0,"Large footbox. Easy to buy and return at REI.",GB],
+ ["Therm-a-Rest","Vesper 20°F",20,20,0,6,1,"900 hydrophobic down","Regular",459.95,"$459.95–495.95",0,"Packs smallest of the big brands; small footbox.",GB],
+ ["Nunatak","Arc UL 20°F",20,19.5,0,6.5,1,"900 down","Custom",345,"$345–367",0,"Custom-made, very soft, lofts quickly.",GB],
+ ["Katabatic","Flex 22°F",22,22.3,0,7,1,"900 HyperDRY down","Narrow",429,"$429",0,"Durable, continuous baffles. On the narrow side for you.",GB],
+ ["Zpacks","Solo Quilt 20°F",20,18.7,0,6,1,"900 down","Regular",409,"$409–429",0,"7D shell is light but delicate.",GB],
+ ["Paria","Thermodown 30°F",30,32,0,5.5,0,"700 down, 16 oz fill","53″ → 39″",160,"$160",0,"Cheapest down quilt here; 72″ long fits up to ~5′10″. Packs to 9 × 6.5″.","https://sectionhiker.com/paria-outdoors-thermodown-30-down-quilt-review/"],
+];
+const rows=D.map(r=>{const pig=r[5]<=4.5?"yes":"no";return {brand:r[0],model:r[1],name:r[0]+" "+r[1],temp:r[2],w:r[3],wEst:r[4],vol:r[5],vEst:r[6],fill:r[7],width:r[8],price:r[9],priceT:r[10],pEst:r[11],note:r[12],url:r[13],pig,pigRank:pig==="yes"?0:1};});
+const est=b=>b?'<span class="est">est.</span>':'';
+const g=oz=>Math.round(oz*28.35).toLocaleString();
+const bsel=document.getElementById("brandsel");
+[...new Set(rows.map(r=>r.brand))].sort().forEach(b=>{const o=document.createElement("option");o.textContent=b;bsel.appendChild(o);});
+let sortK=null,sortDir=1;const state={q:"",temps:new Set(),brand:"",pig:""};
+function bucket(t){return t>=40?"40":t>=30?"30":t>=20?"20":t>=10?"10":"0";}
+function render(){
+  let list=rows.filter(r=>{
+    if(state.q){const s=(r.name+" "+r.fill+" "+r.note+" "+r.width).toLowerCase();if(!state.q.split(/\s+/).every(t=>s.includes(t)))return false;}
+    if(state.temps.size&&!state.temps.has(bucket(r.temp)))return false;
+    if(state.brand&&r.brand!==state.brand)return false;
+    if(state.pig&&r.pig!==state.pig)return false;
+    return true;});
+  if(sortK){list.sort((a,b)=>{let x=a[sortK],y=b[sortK];if(x==null)return 1;if(y==null)return -1;return(typeof x==="string"?x.localeCompare(y):x-y)*sortDir;});}
+  document.getElementById("tb").innerHTML=list.map(r=>`<tr>
+    <td class="model"><a href="${r.url}" target="_blank" rel="noopener">${r.model}</a><small>${r.brand}</small></td>
+    <td class="num">${r.temp}°F</td>
+    <td class="num">${r.w} oz${est(r.wEst)}<span class="sub">${g(r.w)} g</span></td>
+    <td class="num">${r.vol} L${est(r.vEst)}</td>
+    <td>${r.fill}</td>
+    <td>${r.width}</td>
+    <td class="num">${r.priceT}${est(r.pEst)}</td>
+    <td><span class="fit ${r.pig==="yes"?"built":"fiddly"}">${r.pig==="yes"?"Fits":"Pack separately"}</span></td>
+    <td class="note">${r.note||""}</td></tr>`).join("");
+  document.getElementById("count").textContent=`${list.length} of ${rows.length} shown`;
+}
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value.trim().toLowerCase();render();});
+document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{const v=b.dataset.t;const on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",on);on?state.temps.add(v):state.temps.delete(v);render();}));
+bsel.addEventListener("change",e=>{state.brand=e.target.value;render();});
+document.getElementById("pigsel").addEventListener("change",e=>{state.pig=e.target.value;render();});
+document.querySelectorAll("th").forEach(th=>th.querySelector("button").addEventListener("click",()=>{const k=th.dataset.k;if(sortK===k)sortDir=-sortDir;else{sortK=k;sortDir=1;}document.querySelectorAll("th").forEach(h=>h.removeAttribute("aria-sort"));th.setAttribute("aria-sort",sortDir===1?"ascending":"descending");render();}));
+render();
+</script>
+
+</body>
+</html>
