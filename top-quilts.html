@@ -150,7 +150,7 @@
       <select id="brandsel"><option value="">Any</option></select>
     </label>
     <label for="pigsel">Big Pig
-      <select id="pigsel"><option value="">Any</option><option value="yes">Fits with hammock + UQ</option><option value="no">Pack separately</option></select>
+      <select id="pigsel"><option value="">Any</option><option value="yes">Tight squeeze with hammock + UQ</option><option value="no">Pack separately</option></select>
     </label>
     <span class="count" id="count"></span>
   </div>
@@ -170,7 +170,7 @@
       <tbody id="tb"></tbody>
     </table>
   </div>
-  <p class="footnote">Weights are for the regular size unless the row says otherwise. Ratings are each maker's own, and makers rate differently; Hammock Gear and Warbonnet use conservative comfort ratings. "Big Pig" assumes the Circadian Pro and Incubator 20&deg;F (~14 L) are already inside the 18.5 L bag, leaving about 4.5 L, so only quilts that pack to about 4.5 L or less fit with them. <span class="est">est.</span> marks numbers I estimated from a neighboring temperature or size because the maker doesn't publish them. Prices are list prices before options like draft collars and overfill.</p>
+  <p class="footnote">Weights are for the regular size unless the row says otherwise. Ratings are each maker's own, and makers rate differently; Hammock Gear and Warbonnet use conservative comfort ratings. "Big Pig" assumes the Circadian Pro and Incubator 20&deg;F (~14 L) are already inside the 18.5 L bag, leaving about 4.5 L, so quilts that pack to about 4.5 L or less (the 40&deg;F ones) are a tight squeeze that fills the bag completely; anything warmer needs its own stuff sack. <span class="est">est.</span> marks numbers I estimated from a neighboring temperature or size because the maker doesn't publish them. Prices are list prices before options like draft collars and overfill.</p>
 
   <div class="col">
     <h2>What matters for you</h2>
@@ -179,7 +179,7 @@
       <li><strong>Length.</strong> At 5&prime;7&Prime;, short or regular is right. Short saves an ounce or two and a little money.</li>
       <li><strong>Footbox.</strong> A zippered footbox opens flat as a blanket on warm nights; a sewn one is warmer and slightly lighter. Either works in a hammock.</li>
       <li><strong>Ratings line up with the Incubator.</strong> A 20&deg;F top quilt with your 20&deg;F underquilt is a matched pair. A 30&deg;F top quilt plus warm clothes also covers most of spring and fall.</li>
-      <li><strong>Packing.</strong> Only 40&deg;F quilts fit in the Big Pig alongside the hammock and Incubator. A 20&deg;F top quilt goes in its own stuff sack or loose in the dry bag.</li>
+      <li><strong>Packing.</strong> Only 40&deg;F quilts squeeze into the Big Pig alongside the hammock and Incubator, and only just. A 20&deg;F top quilt goes in its own stuff sack or loose in the dry bag.</li>
       <li><strong>Pad straps and draft collars</strong> matter more on the ground than in a hammock. Skip them for hammock-only use to save money.</li>
     </ul>
   </div>
@@ -194,7 +194,7 @@ const JRB="https://jacksrbetter.com/products/";
 const GB="https://greenbelly.co/pages/best-backpacking-quilts";
 // brand, model, temp, weight oz, wEst, packed L, vEst, fill, width, price, priceText, pEst, note, url
 const D=[
- ["Hammock Gear","Burrow 40°F, short",40,17,1,4.5,0,"850 down","50–60″",239.95,"$239.95",0,"Base price is the 40°F short. Fits in the Big Pig with the hammock and Incubator.",HG],
+ ["Hammock Gear","Burrow 40°F, short",40,17,1,4.5,0,"850 down","50–60″",239.95,"$239.95",0,"Base price is the 40°F short. Just squeezes into the Big Pig with the hammock and Incubator (~18.6 L of 18.5 L).",HG],
  ["Hammock Gear","Economy Burrow 40°F",40,17.67,0,4.5,0,"850 down","50–60″",224.95,"$224.95",0,"Greenbelly's tested quilt. Vertical baffles, 15–20% overfill.",GB],
  ["Hammock Gear","Burrow 30°F, standard",30,21.8,0,5.5,1,"850 down, 12.8 oz fill","50–60″",274.95,"~$275",1,"Weight is Hammock Gear's own figure for the standard length.",HG],
  ["Hammock Gear","Burrow 20°F, short",20,23,1,8.5,0,"850 down","50–60″",279.95,"~$280",1,"Matches your Incubator 20°F. Short fits up to ~5′9″.",HG],
@@ -249,7 +249,7 @@ function render(){
     <td>${r.fill}</td>
     <td>${r.width}</td>
     <td class="num">${r.priceT}${est(r.pEst)}</td>
-    <td><span class="fit ${r.pig==="yes"?"built":"fiddly"}">${r.pig==="yes"?"Fits":"Pack separately"}</span></td>
+    <td><span class="fit ${r.pig==="yes"?"built":"fiddly"}">${r.pig==="yes"?"Tight squeeze":"Pack separately"}</span></td>
     <td class="note">${r.note||""}</td></tr>`).join("");
   document.getElementById("count").textContent=`${list.length} of ${rows.length} shown`;
 }
