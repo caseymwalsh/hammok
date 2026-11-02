@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gear Spending</title>
+<style>
+  /* Layout: one reading column — summary figures, then purchase, gift and wish-list cost tables. Same sage-and-canvas palette as the gear inventory. */
+  :root {
+    --bg: #faf8f4; --surface: #ffffff; --border: #e3ddd0; --text: #2b2620; --text-muted: #746b5c;
+    --accent: #5f7a52; --accent-soft: #eef2e9; --warn: #a05a2c; --warn-soft: #fbf0e6;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg:#1c1a17; --surface:#26231e; --border:#3a352c; --text:#ece7dc; --text-muted:#a89e8c; --accent:#8fae7c; --accent-soft:#2c3527; --warn:#d99a63; --warn-soft:#3a2c1f; color-scheme: dark; }
+  }
+  :root[data-theme="dark"] { --bg:#1c1a17; --surface:#26231e; --border:#3a352c; --text:#ece7dc; --text-muted:#a89e8c; --accent:#8fae7c; --accent-soft:#2c3527; --warn:#d99a63; --warn-soft:#3a2c1f; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 900px; margin: 0 auto; padding-inline: 1.25rem; padding-block: 2.5rem 4rem; }
+  .breadcrumb { font-size: 0.85rem; margin: 0 0 1.25rem; }
+  .breadcrumb a, td a { color: var(--accent); }
+  .breadcrumb a { text-decoration: none; }
+  h1 { font-size: 1.6rem; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
+  .subtitle { color: var(--text-muted); font-size: 0.95rem; margin: 0 0 1.5rem; }
+  h2 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin: 2.5rem 0 1rem; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; }
+  .tile { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem 1rem; }
+  .tile .label { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 600; }
+  .tile .value { font-size: 1.45rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .tile .sub { font-size: 0.8rem; color: var(--text-muted); }
+  .table-scroll { width: 100%; overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 620px; }
+  th, td { text-align: left; padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th { font-weight: 600; color: var(--text-muted); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.03em; background: var(--accent-soft); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num { white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+  th.num { text-align: right; }
+  td.item { font-weight: 500; }
+  tr.total td { font-weight: 650; background: var(--accent-soft); }
+  .save { color: var(--accent); }
+  .est { display: inline-block; font-size: 0.68rem; font-weight: 600; color: var(--warn); background: var(--warn-soft); border-radius: 5px; padding: 0 0.35rem; margin-left: 0.3rem; vertical-align: middle; }
+  .footnote { font-size: 0.82rem; color: var(--text-muted); margin: 0.6rem 0.2rem 0; }
+  footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.8rem; }
+  @media (max-width: 520px) { h1 { font-size: 1.35rem; } .wrap { padding-inline: 1rem; padding-block: 1.75rem 3rem; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="breadcrumb"><a href="index.html">Trips</a> &middot; <a href="inventory.html">Gear Inventory</a> &middot; Gear Spending</p>
+  <h1>Gear Spending</h1>
+  <p class="subtitle">What the hammock kit has cost so far, what was saved, and what the wish list would add. Prices are before tax and shipping.</p>
+
+  <div class="tiles">
+    <div class="tile"><div class="label">Spent so far</div><div class="value">$621.69</div><div class="sub">5 purchases with a known price</div></div>
+    <div class="tile"><div class="label">Saved</div><div class="value">$154.24</div><div class="sub">25% off the Hammock Gear order</div></div>
+    <div class="tile"><div class="label">Gifts</div><div class="value">$64</div><div class="sub">3 Warbonnet items, at list price</div></div>
+    <div class="tile"><div class="label">Wish list, priced items</div><div class="value">~$494&ndash;565</div><div class="sub">Items without a price yet are left out</div></div>
+  </div>
+
+  <h2>Purchases</h2>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Item</th><th>Vendor</th><th>Date</th><th class="num">List</th><th class="num">Paid</th><th class="num">Saved</th></tr></thead>
+      <tbody>
+        <tr><td class="item">REI Co-op Flash 55 backpack, size M</td><td>REI</td><td>Oct 2026</td><td class="num">&mdash;</td><td class="num">$159.00</td><td class="num">&mdash;</td></tr>
+        <tr><td class="item">Circadian Pro hammock, Moss Green, no straps or whoopie slings</td><td>Hammock Gear</td><td>Nov 1, 2026</td><td class="num">$129.99</td><td class="num">$97.49</td><td class="num save">$32.50</td></tr>
+        <tr><td class="item">Journey tarp, 12&prime;, Copper, D-rings + LineLoc 3s</td><td>Hammock Gear</td><td>Nov 1, 2026</td><td class="num">$149.99</td><td class="num">$112.49</td><td class="num save">$37.50</td></tr>
+        <tr><td class="item">Journey Accessory Kit, orange guylines</td><td>Hammock Gear</td><td>Nov 1, 2026</td><td class="num">$57.00</td><td class="num">$42.75</td><td class="num save">$14.25</td></tr>
+        <tr><td class="item">Incubator underquilt, 20&deg;F, standard, Deep Purple 20D</td><td>Hammock Gear</td><td>Nov 1, 2026</td><td class="num">$279.95<span class="est">est.</span></td><td class="num">$209.96<span class="est">est.</span></td><td class="num save">$69.99</td></tr>
+        <tr class="total"><td>Total</td><td></td><td></td><td class="num">$616.93 + $159</td><td class="num">$621.69</td><td class="num save">$154.24</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="footnote">Hammock Gear prices are list price less the confirmed 25% sale discount, rounded per item. The Incubator list price assumes 20D shells cost the same as 10D; replace with the receipt figure if it differs. The Flash was bought at $159 with no list price recorded.</p>
+
+  <h2>Gifts</h2>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Item</th><th>Vendor</th><th class="num">List value</th></tr></thead>
+      <tbody>
+        <tr><td class="item">Complete Webbing/Buckles Suspension</td><td>Warbonnet</td><td class="num">$23.00</td></tr>
+        <tr><td class="item">Big Pig double-ended stuffsac, 18.5 L</td><td>Warbonnet</td><td class="num">$21.00</td></tr>
+        <tr><td class="item">Tarp Skins</td><td>Warbonnet</td><td class="num">$20.00</td></tr>
+        <tr class="total"><td>Total</td><td></td><td class="num">$64.00</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Wish list estimate</h2>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Item</th><th>Option</th><th class="num">Low</th><th class="num">High</th></tr></thead>
+      <tbody>
+        <tr><td class="item">Top quilt, 20&deg;F</td><td>Hammock Gear Burrow (~$280) or Warbonnet Diamondback (from $340)</td><td class="num">$280<span class="est">est.</span></td><td class="num">$340</td></tr>
+        <tr><td class="item">Horizon Hound down blanket</td><td>Summer top quilt</td><td class="num">$85</td><td class="num">$85</td></tr>
+        <tr><td class="item">MSR PocketRocket 2</td><td>Plus a fuel canister</td><td class="num">$50</td><td class="num">$50</td></tr>
+        <tr><td class="item">Sea to Summit Ultra-Sil dry bag, 20 L</td><td></td><td class="num">$30<span class="est">est.</span></td><td class="num">$30<span class="est">est.</span></td></tr>
+        <tr><td class="item">Superior Gear cinch buckles</td><td>Optional; already own Warbonnet buckles</td><td class="num">$27.95</td><td class="num">$27.95</td></tr>
+        <tr><td class="item">Dirty-water bag</td><td>Evernew, Platypus or CNOC</td><td class="num">$15</td><td class="num">$24</td></tr>
+        <tr><td class="item">Titanium hook stakes (2)</td><td>Generic</td><td class="num">$6</td><td class="num">$8</td></tr>
+        <tr class="total"><td>Total</td><td></td><td class="num">~$494</td><td class="num">~$565</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="footnote">Not priced yet: TOAKS 750 ml pot, ground sheet, bear bag, nata, saw, fishing pole, first aid kit, sunscreen, shemagh, map, Garmin inReach, power bank, sitting pad, thermometer, trekking poles, hiking shoes.</p>
+
+  <footer>Updated November 2, 2026. When a receipt total differs from these figures, update the Paid column.</footer>
+</div>
+</body>
+</html>
